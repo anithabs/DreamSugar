@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.project.uwm.mydiabitiestracker.EditRecords.UpdatePrescriptionRecords">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:textSize="@dimen/prescription_title_size"
+        android:textStyle="bold"
+        android:textColor="@color/maroon"
+        android:text="@string/fragment_update_heading"/>
+
+    <TextView
+        android:id="@+id/prescription_type"
+        style="@style/TextStyle1"
+        android:layout_marginTop="80dp"
+        android:paddingTop="25dp"
+        android:paddingBottom="0dp"
+        android:text="@string/prescription_type"/>
+    <EditText
+        android:focusable="true"
+        android:id="@+id/update_prescription_value"
+        style="@style/EditText"
+        android:inputType="textPersonName"
+        android:layout_alignParentTop="false"
+        android:layout_toRightOf="@+id/prescription_type"
+        android:layout_alignBottom="@+id/prescription_type"
+        android:layout_alignLeft="@+id/update_dosage_value"/>
+    <TextView
+        android:id="@+id/dosage"
+        style="@style/TextStyle1"
+        android:layout_marginTop="@dimen/ahm"
+        android:layout_below="@+id/prescription_type"
+        android:layout_alignLeft="@+id/prescription_type"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:text="@string/prescription_dosage"/>
+    <EditText
+        android:id="@+id/update_dosage_value"
+        style="@style/EditText"
+        android:inputType="number"
+        android:layout_below="@+id/prescription_type_value"
+        android:layout_toRightOf="@+id/dosage"
+        android:layout_alignBottom="@id/dosage"/>
+    <TextView
+        android:id="@+id/time_administered"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:layout_marginTop="@dimen/ahm"
+        style="@style/TextStyle1"
+        android:layout_alignLeft="@+id/dosage"
+        android:layout_below="@+id/dosage"
+        android:text="@string/prescription_time" />
+    <EditText
+        android:id="@+id/update_pTime"
+        style="@style/EditText"
+        android:layout_toRightOf="@+id/time_administered"
+        android:layout_alignBottom="@id/time_administered"
+        android:layout_alignLeft="@id/dosage_value"
+        android:layout_below="@+id/dosage_value"
+        android:inputType="time"/>
+    <TextView
+        android:id="@+id/date_administered"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:layout_marginTop="@dimen/ahm"
+        style="@style/TextStyle1"
+        android:layout_alignLeft="@+id/time_administered"
+        android:layout_below="@+id/time_administered"
+        android:text="@string/prescription_date"/>
+    <EditText
+        android:id="@+id/update_pdate"
+        style="@style/EditText"
+        android:inputType="textPersonName"
+        android:layout_toRightOf="@+id/date_administered"
+        android:layout_alignBottom="@id/date_administered"
+        android:layout_alignLeft="@id/dosage_value" />
+
+    <Button
+        android:id="@+id/prescrtionaddbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update"
+        android:onClick="prescriptionUpdate"
+        android:layout_alignBaseline="@+id/button"
+        android:layout_alignBottom="@+id/button"
+        android:layout_toLeftOf="@+id/update_dosage_value"
+        android:layout_toStartOf="@+id/update_dosage_value" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:onClick="prescriptionDelete"
+        android:id="@+id/button"
+        android:layout_marginTop="55dp"
+        android:layout_below="@+id/update_pdate"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/backFromprescriptionUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="backFromPrescriptionUpdate"
+        android:text="Back"
+        android:layout_marginRight="23dp"
+        android:layout_marginEnd="23dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/button" />
+
+    </RelativeLayout>
+

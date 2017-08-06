@@ -29,6 +29,7 @@ public class PrescriptionActivity extends AppCompatActivity {
             "Humulin N", "Novolin N", "Tresiba", "Levemir", "Lantus", "Toujeo", "Ryzodeg","SymlinPen 120", "SymlinPen 60"};
     private EditText dateTaken;
     private EditText timeTaken;
+    private EditText etDrugName, etDosage;
     private String userName;
     UserPreference pref;
 
@@ -36,22 +37,22 @@ public class PrescriptionActivity extends AppCompatActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Add Prescription");
+        pref = new UserPreference(this);
         setContentView(R.layout.activity_prescription);
 
         userName=pref.getUserName();
 
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,prescriptions);
-        text = (AutoCompleteTextView) findViewById(R.id.prescription_type_value);
-        // set adapter for the auto complete field
-        text.setAdapter(adapter);
-        // specify the minimum type of characters before drop-down list is shown
-        text.setThreshold(1);
+        etDrugName =(EditText) findViewById(R.id.prescription_type_value);
+        etDosage = (EditText) findViewById(R.id.dosage_value);
+        etDrugName.setText(pref.getDrugNameField());
+        etDosage.setText(pref.getDosageField());
 
         Date date = new Date();
-        EditText dateTaken = (EditText) findViewById(R.id.date_administered_value);
+        dateTaken = (EditText) findViewById(R.id.date_administered_value);
         android.text.format.DateFormat df = new android.text.format.DateFormat();
         dateTaken.setText(df.format("yyyy-MM-dd", date));
-        EditText timeTaken = (EditText) findViewById(R.id.time_administered_value);
+        timeTaken = (EditText) findViewById(R.id.time_administered_value);
         timeTaken.setText(df.format("hh:mm", date));
         EditText p_type = (EditText) findViewById(R.id.prescription_type_value);
         p_type.requestFocus();
@@ -92,6 +93,10 @@ public class PrescriptionActivity extends AppCompatActivity {
         String timeString = timeTaken.getText().toString();
         String dateString = dateTaken.getText().toString();
         String drugNameString = drugName.getText().toString();
+        pref.setDrugNameField(drugNameString);
+        pref.setDosageField(prescriptionDose.getText().toString());
+        pref.setPreference(this);
+
         int doseInt = Integer.parseInt(prescriptionDose.getText().toString());
 
         try {
@@ -110,5 +115,3 @@ public class PrescriptionActivity extends AppCompatActivity {
     }
 
 }
-
-

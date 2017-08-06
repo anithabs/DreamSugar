@@ -1,5 +1,7 @@
 package com.project.uwm.mydiabitiestracker.RecordFragment;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,11 +14,10 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.project.uwm.mydiabitiestracker.Adapters.ExerciseAdapter;
 import com.project.uwm.mydiabitiestracker.DatabaseManager;
@@ -26,6 +27,7 @@ import com.project.uwm.mydiabitiestracker.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 
 public class ExerciseRecordsFragment extends Fragment /*implements View.OnClickListener,DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener*/ {
@@ -35,34 +37,24 @@ public class ExerciseRecordsFragment extends Fragment /*implements View.OnClickL
     private RecyclerView rvExercise;
     private RecyclerView.Adapter eAdaptor;
     private RecyclerView.LayoutManager eLayoutManager;
-    private Switch checkSwitch;
-    private CheckBox weekChkBox;
-    private CheckBox dayChkBox;
     private OnFragmentInteractionListener mListener;
     String userName;
     UserPreference pref;
-    EditText editTextFromDate, editTextToDate,editTextFromTime,editTextToTime;
-    TextView editTextSearch;
     private static final int        DIALOG_DATE_PICKER  = 100;
     private int                     datePickerInput;
-    private int fromDay,toDay;
-
-    private int fromMonth,toMonth;
-    private int fromYear, toYear;
-    private int fromMinute, toMinute;
-    private int fromHour,toHour;
-    Calendar fromDate,toDate;
+    public EditText editTextFromDate,editTextToDate,editTextFromTime,editTextToTime;
+    private int day;
+    private int month;
+    private int year, hour,minute;
+    TextView editTextSearch;
 
     public ExerciseRecordsFragment() {
 
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -75,35 +67,95 @@ public class ExerciseRecordsFragment extends Fragment /*implements View.OnClickL
         View rootView = inflater.inflate(R.layout.fragment_exercise_records, container, false);
         rvExercise = (RecyclerView) rootView.findViewById(R.id.rvExercise);
         rvExercise.setHasFixedSize(true);
-        weekChkBox =(CheckBox) getActivity().findViewById(R.id.cbWeek);
-        dayChkBox =(CheckBox) getActivity().findViewById(R.id.cbDay);
+
 
         eLayoutManager = new LinearLayoutManager(getActivity());
         Context context =getActivity();
-        checkSwitch.setChecked(false);
         dbManager = new DatabaseManager(context);
         rvExercise.setLayoutManager(eLayoutManager);
         userName = pref.getUserName();
 
+        final DatePickerDialog.OnDateSetListener from_dateListener,to_dateListener;
+        final TimePickerDialog.OnTimeSetListener from_timeListener,to_timeListener;
+        from_timeListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hr, int min) {
+                hour = hr;
+                minute = min ;
+                updateDisplayFromTime();
+            }
+        };
+        to_timeListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hr, int min) {
+                hour = hr;
+                minute = min ;
+                updateDisplayToTime();
+            }
+        };
+        from_dateListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int yr, int mnth, int monthday) {
+                year =yr;
+                month = mnth;
+                day = monthday;
+                updateFromDisplay();
+            }
+        };
+        to_dateListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int yr, int mnth, int monthday) {
+                year =yr;
+                month = mnth;
+                day = monthday;
+                updateToDisplay();
+            }
+        };
+
+        editTextFromDate.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Calendar calender = Calendar.getInstance(TimeZone.getDefault());
+                DatePickerDialog dialog = new DatePickerDialog(getActivity(),from_dateListener,calender.get(calender.YEAR),calender.get(Calendar.MONTH),calender.get(Calendar.DAY_OF_MONTH));
+                dialog.show();
+            }
+        });
+        editTextToDate.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Calendar calender = Calendar.getInstance(TimeZone.getDefault());
+                DatePickerDialog dialog = new DatePickerDialog(getActivity(),to_dateListener,calender.get(calender.YEAR),calender.get(Calendar.MONTH),calender.get(Calendar.DAY_OF_MONTH));
+                dialog.show();
+            }
+        });
+        editTextToTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calender = Calendar.getInstance(TimeZone.getDefault());
+                TimePickerDialog dialog = new TimePickerDialog(getActivity(),to_timeListener,calender.get(calender.HOUR),calender.get(Calendar.MINUTE),true);
+                dialog.show();
+            }
+        });
+        editTextFromTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calender = Calendar.getInstance(TimeZone.getDefault());
+                TimePickerDialog dialog = new TimePickerDialog(getActivity(),from_timeListener,calender.get(calender.HOUR),calender.get(Calendar.MINUTE),true);
+                dialog.show();
+            }
+        });
+        rvExercise.setLayoutManager(eLayoutManager);
+
         editTextSearch.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+                exerciseList = dbManager.selectAllExerciseDetails(userName);
+                eAdaptor = new ExerciseAdapter(getActivity(), exerciseList);
+                rvExercise.setAdapter(eAdaptor);
+            }
             public void beforeTextChanged(CharSequence s, int start,
                                           int count, int after) {
             }
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
-                //Field2.setText("");
-            }
-        });
-        checkSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-            public void onCheckedChanged(CompoundButton button,boolean isChecked){
-                if(isChecked){
-                    dayChkBox.setChecked(false);
-                    weekChkBox.setChecked(false);
-                    exerciseList = dbManager.selectAllExerciseDetails(userName);
-                    eAdaptor = new ExerciseAdapter(getActivity(), exerciseList);
-                    rvExercise.setAdapter(eAdaptor);
-                }
+
             }
         });
         return rootView;
@@ -124,17 +176,20 @@ public class ExerciseRecordsFragment extends Fragment /*implements View.OnClickL
         mListener = null;
     }
 
+    private void updateFromDisplay(){
+        editTextFromDate.setText(new StringBuilder().append(year).append("-").append(month).append("-").append(day));
+    }
+    private void updateToDisplay(){
+        editTextToDate.setText(new StringBuilder().append(year).append("-").append(month).append("-").append(day));
+    }
+    private void updateDisplayToTime(){
+        editTextToTime.setText(new StringBuilder().append(hour).append(":").append(minute));
+    }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    private void updateDisplayFromTime(){
+        editTextFromTime.setText(new StringBuilder().append(hour).append(":").append(minute));
+    }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,33 +22,32 @@ import java.util.Date;
 
 public class ExerciseActivity extends AppCompatActivity {
     private DatabaseManager dbManager;
-    AutoCompleteTextView text;
-    private ArrayAdapter<String> adapter;
-    String[] exercises
-            ={"Super Squats","Archery","Gymnastics","MMA","Ballet","Triathlon","Wrestling", "Boxing", "Crossfit",
-            "Powerlifting", "Football", "Hurdles", "Rock Climbing", "Pole Vaulting", "Walking", "Running"};
+
+    private static final String EXERCISE_TYPE_KEY ="exerciseType";
+    private static final String DURATION_KEY = "duration";
     public static final String EA = "ExerciseActivity";
     String userName;
     UserPreference pref;
+    EditText exTime, exDate, exType, exDuration;
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        setTitle("Log Exercise");
+        pref = new UserPreference(this);
         setContentView(R.layout.activity_exercise);
         userName = pref.getUserName();
+        exType = (EditText) findViewById(R.id.exercise_type_value);
+        exDuration= (EditText) findViewById(R.id.exercise_duration_value);
 
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,exercises);
-        text = (AutoCompleteTextView) findViewById(R.id.exercise_type_value);
-        // set adapter for the auto complete field
-        text.setAdapter(adapter);
-        // specify the minimum type of characters before drop-down list is shown
-        text.setThreshold(1);
+        exType.setText(pref.getExerciseField());
+        exDuration.setText(pref.getDurationField());
 
         Date date = new Date();
-        EditText dateOfExercise = (EditText) findViewById(R.id.exercise_date_value);
+        exDate = (EditText) findViewById(R.id.exercise_date_value);
         android.text.format.DateFormat df = new android.text.format.DateFormat();
-        dateOfExercise.setText(df.format("yyyy-MM-dd",date));
-        EditText startTimeOfExercise = (EditText) findViewById(R.id.exercise_start_time_value);
-        startTimeOfExercise.setText(df.format("hh:mm",date));
+        exDate.setText(df.format("yyyy-MM-dd",date));
+        exTime = (EditText) findViewById(R.id.exercise_start_time_value);
+        exTime.setText(df.format("hh:mm",date));
     }
     protected void onStart() {
         super.onStart();
@@ -79,14 +76,14 @@ public class ExerciseActivity extends AppCompatActivity {
     
     public void exerciseInsert(View v) {
         dbManager = new DatabaseManager(this);
-        EditText typeOfExercise = (EditText) findViewById(R.id.exercise_type_value);
-        EditText minutesOfExercise = (EditText) findViewById(R.id.exercise_duration_value);
-        EditText dateOfExercise = (EditText) findViewById(R.id.exercise_date_value);
-        EditText startTimeOfExercise = (EditText) findViewById(R.id.exercise_start_time_value);
-        String timeString = startTimeOfExercise.getText().toString();
-        String dateString = dateOfExercise.getText().toString();
-        String typeOfExerciseString = typeOfExercise.getText().toString();
-        int minutesOfExerciseInt = Integer.parseInt(minutesOfExercise.getText().toString());
+        exType = (EditText) findViewById(R.id.exercise_type_value);
+        exDuration= (EditText) findViewById(R.id.exercise_duration_value);
+        exDate = (EditText) findViewById(R.id.exercise_date_value);
+        exTime = (EditText) findViewById(R.id.exercise_start_time_value);
+        String timeString = exTime.getText().toString();
+        String dateString = exDate.getText().toString();
+        String typeOfExerciseString = exType.getText().toString();
+        int minutesOfExerciseInt = Integer.parseInt(exDuration.getText().toString());
 
         try{
             ExerciseReadingObject eco = new ExerciseReadingObject(
@@ -100,10 +97,13 @@ public class ExerciseActivity extends AppCompatActivity {
         } catch ( NumberFormatException nfe ) {
             Toast.makeText( this, "Food Insert error", Toast.LENGTH_LONG ).show( );
         }
-        typeOfExercise.setText("");
-        minutesOfExercise.setText("");
-        typeOfExercise.requestFocus();
+        exType.setText("");
+        exDuration.setText("");
+        exType.requestFocus();
         dbManager.close();
+        pref.setExerciseField(typeOfExerciseString);
+        pref.setDurationField(exDuration.getText().toString());
+        pref.setPreference(this);
 
     }
     public void exerciseToRegimen(View view){

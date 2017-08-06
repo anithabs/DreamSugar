@@ -1,99 +1,138 @@
 package com.project.uwm.mydiabitiestracker.Insertion;
-
-
 /**
  * Created by Anitha on 7/14/2017.
  */
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.project.uwm.mydiabitiestracker.DatabaseManager;
+import com.project.uwm.mydiabitiestracker.Objects.FoodConsumedObject;
 import com.project.uwm.mydiabitiestracker.Objects.UserPreference;
 import com.project.uwm.mydiabitiestracker.R;
-import com.project.uwm.mydiabitiestracker.Objects.FoodConsumedObject;
-import com.project.uwm.mydiabitiestracker.VeiwRegimen;
 
 import java.util.Date;
 
-public class FoodInsertActivity extends AppCompatActivity {
+public class FoodInsertActivity extends AppCompatActivity implements TextView.OnEditorActionListener {
     private DatabaseManager dbManager;
-    AutoCompleteTextView text;
+    EditText aofText,tofText ,dateFood, timeFood;
     private ArrayAdapter<String> adapter;
     String userName;
-    String[] food
-            ={"banana","apple","french fries","corn","eclair","jello", "avocado", "egg",
-            "yogurt", "steak", "peanut butter and jelly sandwich", "arugula", "celery", "starfruit", "lemon"};
+    Context context;
+
     public static final String FI = "FoodInsertActivity";
     UserPreference pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_food);
-        userName = pref.getUserName();
-        dbManager = new DatabaseManager(this);
+        pref = new UserPreference(this);
 
-        adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,food);
-        text = (AutoCompleteTextView) findViewById(R.id.foodtypevalue);
-        // set adapter for the auto complete field
-        text.setAdapter(adapter);
-        // specify the minimum type of characters before drop-down list is shown
-        text.setThreshold(1);
-        dbManager = new DatabaseManager(this);
+        setTitle("Add Food");
+        setContentView(R.layout.activity_food);
+
+
+       /* if ((savedInstanceState != null)
+                && (savedInstanceState.getSerializable("aof") != null)) {
+                 aofText = (EditText) savedInstanceState
+                         .getSerializable("aof");
+             }
+        if ((savedInstanceState != null)
+                && (savedInstanceState.getSerializable("tof") != null)) {
+                 tofText = (EditText) savedInstanceState
+                         .getSerializable("tof");
+             }*/
+        userName = pref.getUserName();
+
+        aofText = (EditText) findViewById(R.id.amount_food_value);
+        tofText = (EditText) findViewById(R.id.foodtypevalue);
+        aofText.setText(pref.getAmountOfFoodField());
+        tofText.setText(pref.getTypeoffoodField());
+
         Date date = new Date();
-        EditText datefood = (EditText) findViewById(R.id.date_value_f);
+        dateFood = (EditText) findViewById(R.id.date_value_f);
         android.text.format.DateFormat df = new android.text.format.DateFormat();
-        datefood.setText(df.format("yyyy-MM-dd",date));
-        EditText timefood = (EditText) findViewById(R.id.time_value_f);
-        timefood.setText(df.format("hh:mm",date));
+        dateFood.setText(df.format("yyyy-MM-dd",date));
+        timeFood = (EditText) findViewById(R.id.time_value_f);
+        timeFood.setText(df.format("hh:mm",date));
+        aofText.requestFocus();
+        aofText.setOnEditorActionListener(this);
+
     }
+    @Override
     protected void onStart() {
         super.onStart();
         Log.w(FI, "inside FoodInsertActivity:onStart()\n");
     }
-    protected void onRestart() {
+    @Override
+    public void onRestart() {
         super.onRestart();
         Log.v(FI, "inside FoodInsertActivity:onRestart()\n");
     }
+    @Override
     protected void onResume() {
         super.onResume();
         Log.v(FI, "inside FoodInsertActivity:onResume()\n");
     }
-    protected void onPause() {
+    @Override
+    public void onPause() {
+
         super.onPause();
         Log.v(FI, "inside FoodInsertActivity:onPause()\n");
     }
-    protected void onStop() {
+    @Override
+    public void onStop() {
         super.onStop();
         Log.v(FI, "inside FoodInsertActivity:onStop()\n");
     }
-    protected void onDestroy() {
+    @Override
+    public void onDestroy() {
         super.onDestroy();
         Log.v(FI, "inside FoodInsertActivity:onDestroy()\n");
+
     }
 
+   /* @Override
+    public	void onRestoreInstanceState(Bundle savedInstanceState)	{
+        super.onRestoreInstanceState(savedInstanceState);
+        aofText = (EditText) savedInstanceState.getSerializable("aof");
+        tofText = (EditText) savedInstanceState.getSerializable("tof");
+    }
+    @Override
+    public	void onSaveInstanceState(Bundle savedInstanceState)	{
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putSerializable("aof", aofText.getText().toString());
+        savedInstanceState.putSerializable("tof", tofText.getText().toString());
+    }*/
+
     public void foodInsertDataBase( View v ) {
-        EditText et_foodtypeamount = (EditText) findViewById(R.id.amount_food_value);
-        EditText et_foodtype = (EditText) findViewById(R.id.foodtypevalue);
-        EditText et_timemeasure = (EditText) findViewById(R.id.time_value_f);
-        EditText et_datemeasure = (EditText) findViewById(R.id.date_value_f);
-        String timeString = et_timemeasure.getText().toString();
-        String dateString = et_datemeasure.getText().toString();
+        context = v.getContext();
+        aofText = (EditText) findViewById(R.id.amount_food_value);
+        tofText = (EditText) findViewById(R.id.foodtypevalue);
+        timeFood = (EditText) findViewById(R.id.time_value_f);
+        dateFood = (EditText) findViewById(R.id.date_value_f);
 
-        String foodtypeamount = et_foodtypeamount.getText().toString();
-        String foodtype = et_foodtype.getText().toString();
+        String timeString = timeFood.getText().toString();
+        String dateString = dateFood.getText().toString();
 
+        String foodtypeamount = aofText.getText().toString();
+        String foodtype = tofText.getText().toString();
 
         int amountOfFood = Integer.parseInt(foodtypeamount);
+        pref.setAmountOfFoodField(foodtypeamount);
+        pref.setTypeoffoodField(foodtype);
+        pref.setPreference(this);
 
+        dbManager = new DatabaseManager(this);
         try{
             FoodConsumedObject fco = new FoodConsumedObject( 0,userName,foodtype, amountOfFood, dateString,timeString );
 
@@ -102,10 +141,11 @@ public class FoodInsertActivity extends AppCompatActivity {
         } catch ( NumberFormatException nfe ) {
             Toast.makeText( this, "Food Insert error", Toast.LENGTH_LONG ).show( );
         }
-        et_foodtypeamount.setText("");
-        et_foodtype.setText("");
-        et_foodtype.requestFocus();
+        aofText.setText("");
+        tofText.setText("");
+        aofText.requestFocus();
         dbManager.close();
+
     }
  /*   void onFoodClicked (View v){
         Intent intent = new Intent(this,FoodActivity.class);
@@ -115,8 +155,11 @@ public class FoodInsertActivity extends AppCompatActivity {
         this.finish();
     }
 
-    public void goBackFromFood(View view){
-        Intent intent = new Intent(this,VeiwRegimen.class);
-        startActivity(intent);
+    @Override
+    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        if(i== EditorInfo.IME_ACTION_DONE){
+            return  true;
+        }
+        return false;
     }
 }

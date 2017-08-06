@@ -12,12 +12,16 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.project.uwm.mydiabitiestracker.Alarm.ReminderListActivity;
+import com.project.uwm.mydiabitiestracker.Objects.UserPreference;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final String MA = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        verifyLogin();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -30,6 +34,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
+
+    private void verifyLogin() {
+        UserPreference pref = new UserPreference(this);
+        String userName,password;
+        userName = pref.getUserName();
+        password = pref.getPassword();
+
+
+
+        DatabaseManager dbManager = new DatabaseManager(this);
+
+        int statusUser = dbManager.verifyLogin(userName,password);
+        if (statusUser <= 0) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+    }
+
+
     protected void onStart() {
         super.onStart();
         Log.w(MA, "inside MainActivity:onStart()\n");
@@ -81,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
 
         } else if (id == R.id.delete) {
+            Intent intent = new Intent(this, ReminderListActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.user_details){
 

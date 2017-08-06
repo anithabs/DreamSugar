@@ -1,9 +1,7 @@
 package com.project.uwm.mydiabitiestracker.Objects;
-
 /**
  * Created by Anitha on 7/22/2017.
  */
-
 public class UserObject {
 
     private static String userName;
@@ -58,6 +56,5 @@ public class UserObject {
     public static String getUserName() {
         return userName;
     }
-
 
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/view_records"
+            android:icon="@drawable/ic_menu_share"
+            android:title="View Records and update" />
+        <item
+            android:id="@+id/view_graphs"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="View Statistics" />
+        <item
+            android:id="@+id/delete"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Delete" />
+        <item
+            android:id="@+id/user_details"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="User Details" />
+    </group>
+
+
+
+</menu>

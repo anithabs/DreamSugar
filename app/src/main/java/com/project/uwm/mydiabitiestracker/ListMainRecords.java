@@ -32,6 +32,28 @@ public class ListMainRecords extends AppCompatActivity implements AdapterView.On
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         menuSpinner.setAdapter(adapter);
         menuSpinner.setOnItemSelectedListener(this);
+
+      /*  Button button = (Button)findViewById(R.id.backFragmentButton);
+
+
+        button.setFocusableInTouchMode(true);
+        button.requestFocus();
+        button.setOnKeyListener(new View.OnClickListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                Log.i(tag, "keyCode: " + keyCode);
+                if( keyCode == KeyEvent.KEYCODE_BACK ) {
+                    Log.i(tag, "onKey Back listener is working!!!");
+                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+*/
+
+
     }
 
 /*
@@ -88,6 +110,14 @@ public class ListMainRecords extends AppCompatActivity implements AdapterView.On
     {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    public void onBackPressed(View v) {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override

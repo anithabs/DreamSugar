@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -63,6 +64,8 @@ public class PrescriptionRecordsFragment extends Fragment /*implements View.OnCl
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Spinner spinner = (Spinner) getActivity().findViewById(R.id.selectRecords);
+        spinner.setSelection(3);
         editTextFromDate =(EditText) getActivity().findViewById(R.id.editTextFromDate);
         editTextToDate =(EditText) getActivity().findViewById(R.id.editTextToDate);
         editTextFromTime =(EditText) getActivity().findViewById(R.id.editTextFromTime);

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -58,6 +59,8 @@ public class ExerciseRecordsFragment extends Fragment /*implements View.OnClickL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Spinner spinner = (Spinner) getActivity().findViewById(R.id.selectRecords);
+        spinner.setSelection(2);
         editTextFromDate =(EditText) getActivity().findViewById(R.id.editTextFromDate);
         editTextToDate =(EditText) getActivity().findViewById(R.id.editTextToDate);
         editTextFromTime =(EditText) getActivity().findViewById(R.id.editTextFromTime);

@@ -189,11 +189,11 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:orientation="horizontal">
             <Button
-                android:id="@+id/homeButton"
+                android:id="@+id/backFragmentButton"
                 style="@style/Button"
                 android:layout_width="match_parent"
                 android:layout_height="29dp"
-                android:onClick="foodToMain"
+                android:onClick="onBackPressed"
                 android:text="Back" />
         </LinearLayout>
     </LinearLayout>

@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -63,6 +64,8 @@ public class FoodRecordsFragment extends Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
+        Spinner spinner = (Spinner) getActivity().findViewById(R.id.selectRecords);
+        spinner.setSelection(0);
         editTextFromDate =(EditText) getActivity().findViewById(R.id.editTextFromDate);
         editTextToDate =(EditText) getActivity().findViewById(R.id.editTextToDate);
         editTextFromTime =(EditText) getActivity().findViewById(R.id.editTextFromTime);

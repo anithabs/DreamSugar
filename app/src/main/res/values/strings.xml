@@ -151,17 +151,17 @@
     <string name="body">Body</string>
     <string name="confirm">Save</string>
     <string name="edit_reminder">Edit Reminder</string>
-   <!-- <string name="date">Reminder Date</string>
+    <!-- <string name="date">Reminder Date</string>
     <string name="time">Reminder Time</string>-->
 
-        <!-- Toasts -->
+    <!-- Toasts -->
     <string name="task_saved_message">Task has been saved</string>
 
-        <!-- Notification Bar -->
+    <!-- Notification Bar -->
     <string name="notify_new_task_message">A task needs to be reviewed!</string>
     <string name="notify_new_task_title">Task Reminder!</string>
 
-        <!-- Preferences -->
+    <!-- Preferences -->
     <string name="pref_category_task_defaults_key">task_default_category</string>
     <string name="pref_category_task_defaults_title">Task Title Default</string>
     <string name="pref_task_title_key">default_reminder_title</string>
@@ -177,5 +177,6 @@
     <string name="pref_default_time_from_now_message">The default time from now that a new reminder should be set to.</string>
     <string name="pref_default_time_from_now_summary">Sets the default time for a reminder.</string>
     <string name="pref_default_time_from_now_title">Default Reminder Time</string>
+    <string name="title_activity_exercise_graph_fragment">EXerciseGraphFragment</string>
 
-    </resources>
+</resources>

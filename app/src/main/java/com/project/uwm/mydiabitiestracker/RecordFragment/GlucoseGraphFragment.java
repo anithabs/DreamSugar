@@ -62,7 +62,7 @@ public class GlucoseGraphFragment extends Fragment {
             xAxisDate.add(new Entry((float)i, Float.valueOf(dateArray.get(i))));
         }
 
-        
+
         return rootView;
     }
 

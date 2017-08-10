@@ -20,7 +20,8 @@ public class GlucoseGraphFragment extends Fragment {
 
     LineChart glouseLineChart;
     DatabaseManager dbManager;
-    ArrayList<String> dateArray;
+    ArrayList<String> dateStringArray;
+    ArrayList<Float> date , month, year;
     ArrayList<Integer> glucoseLevel;
     ArrayList<GlucoseReadingObject> glucoseObjectArray;
     UserPreference pref;
@@ -43,14 +44,21 @@ public class GlucoseGraphFragment extends Fragment {
         View  rootView = inflater.inflate(R.layout.fragment_glucose_graph, container, false);
         glouseLineChart = (LineChart) getActivity().findViewById(R.id.foodBarChart);
         dbManager = new DatabaseManager(this.getContext());
-        dateArray = new ArrayList<String>();
+        dateStringArray = new ArrayList<String>();
         glucoseLevel = new ArrayList<Integer>();
         glucoseObjectArray = dbManager.selectAllGlucoseDetails(userName);
 
         for(int i = 0; i < glucoseObjectArray.size(); i++){
             glucoseLevel.add(glucoseObjectArray.get(i).getGlucose_level());
-            dateArray.add(glucoseObjectArray.get(i).getGdate());
+            dateStringArray.add(glucoseObjectArray.get(i).getGdate());
         }
+
+        for(int i = 0; i < dateStringArray.size(); i++ ){
+            String[] parts = dateStringArray.get(i).split("-");
+            String day = parts[0]; // 004
+            String part2 = parts[1]; // 034556
+        }
+
 
         ArrayList<Entry> xAxisDate = new ArrayList<>();
         ArrayList<Entry> yAxisLevel = new ArrayList<>();
@@ -58,8 +66,8 @@ public class GlucoseGraphFragment extends Fragment {
         for(int i = 0; i < glucoseLevel.size();i++){
             yAxisLevel.add( new Entry(i, glucoseLevel.get(i)));
         }
-        for (int i = 0;i<dateArray.size();i++){
-            xAxisDate.add(new Entry((float)i, Float.valueOf(dateArray.get(i))));
+        for (int i = 0;i<date.size();i++){
+            xAxisDate.add(new Entry((float)i, date.get(i)));
         }
 
         

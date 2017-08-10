@@ -64,7 +64,7 @@ public class ExerciseActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker datePicker, int yr, int mnth, int monthday) {
                 year =yr;
-                month = mnth;
+                month = mnth +1;
                 day = monthday;
                 updateToDisplayToDay();
             }

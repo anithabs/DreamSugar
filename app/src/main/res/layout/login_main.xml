@@ -1,87 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.project.uwm.mydiabitiestracker.MainActivity"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:paddingLeft="@dimen/ahm"
-    android:paddingRight="@dimen/ahm"
-    android:paddingTop="30dp"
-    android:paddingBottom="@dimen/avm"
-    android:background="@color/white"
-    >
-    <ImageView
-        android:id="@+id/imageView"
+    android:background="#FFFFFF">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        app:srcCompat="@drawable/app_logo_rev2" />
-    <TextView
-        android:id="@+id/label_user"
-        style="@style/TextStyleCommon"
-        android:textSize="@dimen/stringsize"
-        android:text="@string/user"
-        android:layout_below="@+id/imageView" />
-    <!--android:minWidth="10dp"-->
-    <EditText
-        android:id="@+id/hint_user"
-        android:paddingLeft="10dp"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/hidestringsize"
-        android:hint = "@string/userhint"
-        android:layout_below="@+id/label_user"
-        android:layout_alignLeft="@+id/label_user"
-        android:background="@drawable/border"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="10dp"
-        />
-    <TextView
-        android:id="@+id/password_user"
-        style="@style/TextStyleCommon"
-        android:textSize="@dimen/stringsize"
-        android:text="@string/password"
-        android:layout_below="@+id/hint_user"
-        android:layout_alignLeft="@+id/hint_user"
-        />
-
-    <EditText
-        android:id="@+id/hint_password"
-        android:paddingLeft="10dp"
-        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <LinearLayout
+            style="@style/LinearLayout">
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                app:srcCompat="@drawable/app_logo_rev2" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border"
-        android:layout_below="@+id/password_user"
-        android:layout_alignLeft="@+id/password_user"
-        android:hint="@string/passwordhint"
-        android:layout_alignStart="@+id/password_user"
-        android:textSize="@dimen/hidestringsize"
-        android:layout_alignParentRight="true"
-        android:inputType="textPassword"
-        />
-
-    <Button
-        android:id="@+id/button_login"
-        style="@style/TextStyleCommon"
-        android:text="@string/buttonlogin"
-        android:textSize="@dimen/hidestringsize"
-        android:layout_gravity="center"
-        android:layout_below="@+id/hint_password"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="27dp"
-        android:onClick="verifyLogin"/>
-
-    <EditText
-        android:id="@+id/new_user"
-        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <LinearLayout
+            style="@style/LinearLayout"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:weightSum="1">
+            <TextView
+                style="@style/TextView"
+                android:text="@string/user" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/newuser"
-        android:textSize="@dimen/stringsize"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <LinearLayout
+            style="@style/LinearLayout"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+            <EditText
+                android:id = "@+id/hint_user"
+                style="@style/EditTextN"
+                android:inputType="text" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <LinearLayout
+            style="@style/LinearLayout"
+            android:weightSum="1"
+            android:paddingTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+            <TextView
+                style="@style/TextView"
+                android:text="@string/password" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <LinearLayout
+            style="@style/LinearLayout"
+            android:weightSum="1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+            <EditText
+                android:id ="@+id/hint_password"
+                style="@style/EditTextN"
+                android:ems="10"
+                android:inputType="text" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:paddingTop="40dp"
-        android:onClick="userCreate"
-        android:textColor="@color/colorMotto"
-        android:layout_below="@+id/button_login"
-        android:layout_centerHorizontal="true" />
-</RelativeLayout>
+        android:orientation="horizontal">
+            <Button
+                android:id="@+id/button_login"
+                style="@style/Button"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:onClick="verifyLogin"
+                android:text="@string/buttonlogin" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <LinearLayout
+            style="@style/LinearLayout"
+            android:paddingTop="40dp"
+            android:gravity="center"
+            android:weightSum="1">
+            <TextView
+                android:id ="@+id/new_user"
+                android:onClick="userCreate"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorMotto"
+                android:text="@string/newuser"
+                android:textSize="@dimen/stringsize" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

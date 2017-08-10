@@ -1,8 +1,5 @@
 package com.project.uwm.mydiabitiestracker;
 
-import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -10,8 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.project.uwm.mydiabitiestracker.RecordFragment.ExerciseRecordsFragment;
@@ -19,12 +14,6 @@ import com.project.uwm.mydiabitiestracker.RecordFragment.FoodRecordsFragment;
 import com.project.uwm.mydiabitiestracker.RecordFragment.GlucoseRecordsFragment;
 import com.project.uwm.mydiabitiestracker.RecordFragment.PrescriptionRecordsFragment;
 
-import java.util.Calendar;
-import java.util.TimeZone;
-
-/**
- * Created by Anitha on 7/29/2017.
- */
 
 public class ListMainRecords extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Spinner menuSpinner;

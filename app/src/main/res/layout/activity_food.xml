@@ -27,11 +27,12 @@
             android:layout_marginRight="10dp"
             android:paddingTop="5dp"
             android:weightSum="1">
-            <EditText
+            <AutoCompleteTextView
                 android:id = "@+id/foodtypevalue"
                 style="@style/EditTextN"
                 android:ems="10"
                 android:inputType="text"
+                android:editable="true"
                 android:imeOptions="actionDone"/>
         </LinearLayout>
     </LinearLayout>

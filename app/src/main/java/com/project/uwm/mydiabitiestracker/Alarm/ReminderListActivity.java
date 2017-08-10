@@ -7,14 +7,15 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.AdapterView.AdapterContextMenuInfo;
+
 import com.project.uwm.mydiabitiestracker.R;
 
 public class ReminderListActivity extends ListActivity {
@@ -27,11 +28,13 @@ public class ReminderListActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Remainder List");
         setContentView(R.layout.reminder_list);
         mDbHelper = new RemindersDbAdapter(this);
         mDbHelper.open();
         fillData();
-        registerForContextMenu(getListView());
+
+
 
     }
     
@@ -39,16 +42,11 @@ public class ReminderListActivity extends ListActivity {
 	private void fillData() {
         Cursor remindersCursor = mDbHelper.fetchAllReminders();
         startManagingCursor(remindersCursor);
-        
-        // Create an array to specify the fields we want to display in the list (only TITLE)
-        String[] from = new String[]{RemindersDbAdapter.KEY_TITLE};
-        
-        // and an array of the fields we want to bind those fields to (in this case just text1)
-        int[] to = new int[]{R.id.text1};
-        
-        // Now create a simple cursor adapter and set it to display
-        SimpleCursorAdapter reminders = 
-        	    new SimpleCursorAdapter(this, R.layout.reminder_row, remindersCursor, from, to);
+
+        SimpleCursorAdapter reminders = new SimpleCursorAdapter(this, R.layout.reminder_row,remindersCursor,new String[]
+                {RemindersDbAdapter.KEY_TITLE,RemindersDbAdapter.KEY_DATE_TIME},new int[]
+                {R.id.rtitle, R.id.rdate});
+
         setListAdapter(reminders);
     }
     
@@ -59,7 +57,6 @@ public class ReminderListActivity extends ListActivity {
         mi.inflate(R.menu.list_menu, menu); 
         return true;
     }
-
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch(item.getItemId()) {

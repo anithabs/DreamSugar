@@ -153,7 +153,7 @@ public class PrescriptionRecordsFragment extends Fragment /*implements View.OnCl
 
         editTextSearch.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                presList = dbManager.selectAllPrescriptionDetails(userName);
+                presList = dbManager.selectSearchPrescriptionRecord(userName,s.toString());
                 pAdaptor = new PrescriptionAdaptor(getActivity(), presList);
                 rvPres.setAdapter(pAdaptor);
             }
@@ -178,18 +178,48 @@ public class PrescriptionRecordsFragment extends Fragment /*implements View.OnCl
         }*/
     }
 
+
     private void updateFromDisplay(){
-        editTextFromDate.setText(new StringBuilder().append(year).append("-").append(month).append("-").append(day));
+        if(month <10 && day <10 ) {
+            editTextFromDate.setText(new StringBuilder().append(year).append("-0").append(month).append("-0").append(day));
+        }else if(month <10){
+            editTextFromDate.setText(new StringBuilder().append(year).append("-0").append(month).append("-").append(day));
+        }else if(day <10){
+            editTextFromDate.setText(new StringBuilder().append(year).append("-").append(month).append("-0").append(day));
+        }else
+            editTextFromDate.setText(new StringBuilder().append(year).append("-").append(month).append("-").append(day));
     }
     private void updateToDisplay(){
-        editTextToDate.setText(new StringBuilder().append(year).append("-").append(month).append("-").append(day));
+        if(month <10 && day <10 ) {
+            editTextToDate.setText(new StringBuilder().append(year).append("-0").append(month).append("-0").append(day));
+        }else if(month <10){
+            editTextToDate.setText(new StringBuilder().append(year).append("-0").append(month).append("-").append(day));
+        }else if(day <10){
+            editTextToDate.setText(new StringBuilder().append(year).append("-").append(month).append("-0").append(day));
+        }else
+            editTextToDate.setText(new StringBuilder().append(year).append("-").append(month).append("-").append(day));
     }
     private void updateDisplayToTime(){
-        editTextToTime.setText(new StringBuilder().append(hour).append(":").append(minute));
+        if(hour <10 && minute <10){
+            editTextToTime.setText(new StringBuilder().append("0").append(hour).append(":0").append(minute));
+        }else if(hour <10){
+            editTextToTime.setText(new StringBuilder().append("0").append(hour).append(":").append(minute));
+        }else if(minute <10) {
+            editTextToTime.setText(new StringBuilder().append(hour).append(":0").append(minute));
+        }else {
+            editTextToTime.setText(new StringBuilder().append(hour).append(":").append(minute));
+        }
     }
-
     private void updateDisplayFromTime(){
-        editTextFromTime.setText(new StringBuilder().append(hour).append(":").append(minute));
+        if(hour <10 && minute <10){
+            editTextFromTime.setText(new StringBuilder().append("0").append(hour).append(":0").append(minute));
+        }else if(hour <10){
+            editTextFromTime.setText(new StringBuilder().append("0").append(hour).append(":").append(minute));
+        }else if(minute <10) {
+            editTextFromTime.setText(new StringBuilder().append(hour).append(":0").append(minute));
+        }else {
+            editTextFromTime.setText(new StringBuilder().append(hour).append(":").append(minute));
+        }
     }
     @Override
     public void onDetach() {

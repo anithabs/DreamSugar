@@ -49,7 +49,7 @@
     <string name="passwordhint">Enter Password</string>
     <string name="userhint">Enter user name</string>
     <string name="buttonlogin">Login</string>
-    <string name="newuser">Create New Account</string>
+    <string name="newuser"><u>Create New Account</u></string>
 
     <string name="glucose">Glucose</string>
     <string name="glucose_log_title">Blood-Glucose Log</string>
@@ -116,8 +116,8 @@
     <string name="fragment_update_heading">UPDATE / DELETE RECORD</string>
 
     <string name="welcome">Welcome</string>
-    <string name="user_name">Select a User Name</string>
-    <string name="password_legend">Choose Password</string>
+    <string name="user_name">User Name</string>
+    <string name="password_legend">Password</string>
     <string name="motto">"The best way to manage diabetes."</string>
 
 

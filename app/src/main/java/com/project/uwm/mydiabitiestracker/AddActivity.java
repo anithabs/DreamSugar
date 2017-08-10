@@ -1,3 +1,4 @@
+/*
 package com.project.uwm.mydiabitiestracker;
 
 import android.content.Intent;
@@ -16,9 +17,11 @@ import com.project.uwm.mydiabitiestracker.Insertion.RegimenActivity;
 import com.project.uwm.mydiabitiestracker.Objects.RegimenReadingObject;
 import com.project.uwm.mydiabitiestracker.Objects.UserPreference;
 
+*/
 /**
  * Created by Anitha on 7/23/2017.
- */
+ *//*
+
  public class AddActivity extends AppCompatActivity {
     public static final String AA = "AddActivity";
     private RegimenReadingObject ra;
@@ -92,10 +95,12 @@ import com.project.uwm.mydiabitiestracker.Objects.UserPreference;
         startActivity(intent);
 
     }
-    public void ViewRegimen(View v){
+  */
+/*  public void ViewRegimen(View v){
         Intent intent = new Intent(this, VeiwRegimen.class);
         startActivity(intent);
-    }
+    }*//*
+
    public void RemindersCheck(View v){
         Intent intent = new Intent(this, ReminderEditActivity.class);
         startActivity(intent);
@@ -107,4 +112,4 @@ import com.project.uwm.mydiabitiestracker.Objects.UserPreference;
 
 
 
-}
+}*/

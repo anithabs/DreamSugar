@@ -41,8 +41,8 @@ public class ReminderEditActivity extends Activity {
 	
 	private EditText mTitleText;
     private EditText mBodyText;
-    private Button mDateButton;
-    private Button mTimeButton;
+    private EditText mDateText;
+    private EditText mTimeText;
     private Button mConfirmButton;
     private Long mRowId;
     private RemindersDbAdapter mDbHelper;
@@ -59,8 +59,8 @@ public class ReminderEditActivity extends Activity {
         mCalendar = Calendar.getInstance(); 
         mTitleText = (EditText) findViewById(R.id.title);
         mBodyText = (EditText) findViewById(R.id.body);
-        mDateButton = (Button) findViewById(R.id.reminder_date);
-        mTimeButton = (Button) findViewById(R.id.reminder_time);
+        mDateText = (EditText) findViewById(R.id.reminder_date);
+        mTimeText = (EditText) findViewById(R.id.reminder_time);
       
         mConfirmButton = (Button) findViewById(R.id.confirm);
        
@@ -137,16 +137,16 @@ public class ReminderEditActivity extends Activity {
  	
 	private void registerButtonListenersAndSetDefaultText() {
 
-		mDateButton.setOnClickListener(new View.OnClickListener() {
+		mDateText.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				showDialog(DATE_PICKER_DIALOG);  
 			}
-		}); 
-		
-		
-		mTimeButton.setOnClickListener(new View.OnClickListener() {
+		});
+
+
+		mTimeText.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -214,38 +214,30 @@ public class ReminderEditActivity extends Activity {
         updateTimeButtonText(); 
         	
     }
-
 	private void updateTimeButtonText() {
 		// Set the time button text based upon the value from the database
         SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT); 
         String timeForButton = timeFormat.format(mCalendar.getTime()); 
-        mTimeButton.setText(timeForButton);
+        mTimeText.setText(timeForButton);
 	}
-
 	private void updateDateButtonText() {
 		// Set the date button text based upon the value from the database 
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT); 
         String dateForButton = dateFormat.format(mCalendar.getTime()); 
-        mDateButton.setText(dateForButton);
+        mDateText.setText(dateForButton);
 	}
-    
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putLong(RemindersDbAdapter.KEY_ROWID, mRowId);
     }
-    
-
-    
     private void saveState() {
         String title = mTitleText.getText().toString();
         String body = mBodyText.getText().toString();
 
         SimpleDateFormat dateTimeFormat = new SimpleDateFormat(DATE_TIME_FORMAT); 
     	String reminderDateTime = dateTimeFormat.format(mCalendar.getTime());
-
         if (mRowId == null) {
-        	
         	long id = mDbHelper.createReminder(title, body, reminderDateTime);
             if (id > 0) {
                 mRowId = id;

@@ -1,14 +1,18 @@
 package com.project.uwm.mydiabitiestracker.Insertion;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.project.uwm.mydiabitiestracker.DatabaseManager;
@@ -16,11 +20,8 @@ import com.project.uwm.mydiabitiestracker.Objects.GlucoseReadingObject;
 import com.project.uwm.mydiabitiestracker.Objects.UserPreference;
 import com.project.uwm.mydiabitiestracker.R;
 
-import java.util.Date;
-
-/**
- * Created by Anitha on 7/15/2017.
- */
+import java.util.Calendar;
+import java.util.TimeZone;
 
 public class GlucoseInsertActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private DatabaseManager dbManager;
@@ -31,6 +32,10 @@ public class GlucoseInsertActivity extends AppCompatActivity implements AdapterV
     int step = 1;
     UserPreference pref;
     Spinner menuSpinner;
+    private int day;
+    private int month;
+    private int year, hour,minute;
+    EditText dateglu, timeglu;
 
         public void onCreate(Bundle savedInstanceState){
             super.onCreate(savedInstanceState);
@@ -71,12 +76,49 @@ public class GlucoseInsertActivity extends AppCompatActivity implements AdapterV
             });
 
             userName = pref.getUserName();
-            Date date = new Date();
-            EditText dateglu = (EditText) findViewById(R.id.date_value);
+            dateglu = (EditText) findViewById(R.id.date_value);
+            timeglu = (EditText) findViewById(R.id.time_value);
+         /*   Date date = new Date();
+
             android.text.format.DateFormat df = new android.text.format.DateFormat();
             dateglu.setText(df.format("yyyy-MM-dd",date));
-            EditText timeglu = (EditText) findViewById(R.id.time_value);
-            timeglu.setText(df.format("hh:mm",date));
+
+            timeglu.setText(df.format("hh:mm",date));*/
+
+            final DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker datePicker, int yr, int mnth, int monthday) {
+                    year =yr;
+                    month = mnth;
+                    day = monthday;
+                    updateToDisplayToDay();
+                }
+            };
+            dateglu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Calendar calender = Calendar.getInstance(TimeZone.getDefault());
+                    DatePickerDialog dialog = new DatePickerDialog(view.getContext(),dateListener,calender.get(calender.YEAR),calender.get(Calendar.MONTH),calender.get(Calendar.DAY_OF_MONTH));
+                    dialog.show();
+
+                }
+            });
+            final TimePickerDialog.OnTimeSetListener timeListener = new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker timePicker, int hr, int min) {
+                    hour = hr;
+                    minute = min ;
+                    updateDisplayToTime();
+                }
+            };
+            timeglu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Calendar calender = Calendar.getInstance(TimeZone.getDefault());
+                    TimePickerDialog dialog = new TimePickerDialog(view.getContext(),timeListener,calender.get(calender.HOUR),calender.get(Calendar.MINUTE),true);
+                    dialog.show();
+                }
+            });
         }
     protected void onStart() {
         super.onStart();
@@ -140,6 +182,27 @@ public class GlucoseInsertActivity extends AppCompatActivity implements AdapterV
 
     }
 
+    private void updateToDisplayToDay(){
+        if(month <10 && day <10 ) {
+            dateglu.setText(new StringBuilder().append(year).append("-0").append(month).append("-0").append(day));
+        }else if(month <10){
+            dateglu.setText(new StringBuilder().append(year).append("-0").append(month).append("-").append(day));
+        }else if(day <10){
+            dateglu.setText(new StringBuilder().append(year).append("-").append(month).append("-0").append(day));
+        }else
+            dateglu.setText(new StringBuilder().append(year).append("-").append(month).append("-").append(day));
+    }
+    private void updateDisplayToTime() {
+        if(hour <10 && minute <10){
+            timeglu.setText(new StringBuilder().append("0").append(hour).append(":0").append(minute));
+        }else if(hour <10){
+            timeglu.setText(new StringBuilder().append("0").append(hour).append(":").append(minute));
+        }else if(minute <10) {
+            timeglu.setText(new StringBuilder().append(hour).append(":0").append(minute));
+        }else{
+            timeglu.setText(new StringBuilder().append(hour).append(":").append(minute));
+        }
+    }
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 

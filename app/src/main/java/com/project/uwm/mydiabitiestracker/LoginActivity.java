@@ -12,9 +12,6 @@ import android.widget.Toast;
 import com.project.uwm.mydiabitiestracker.Insertion.UserActivity;
 import com.project.uwm.mydiabitiestracker.Objects.UserPreference;
 
-/**
- * Created by Anitha on 7/9/2017.
- */
 
 public class LoginActivity extends AppCompatActivity {
     Button login_button;
@@ -24,11 +21,14 @@ public class LoginActivity extends AppCompatActivity {
     private static final String USER_DETAILS ="userDetails";
     UserPreference pref;
     public static final String LA = "LoginActivity";
+    public String Signout;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Create new user");
         pref = new UserPreference(this);
         setContentView(R.layout.login_main);
+
     }
     protected void onStart() {
         super.onStart();
@@ -70,15 +70,14 @@ public class LoginActivity extends AppCompatActivity {
         String passWordString = passWord.getText().toString().trim();
         pref.setUserName(userNameString);
         pref.setPassword(passWordString);
+        pref.setSignout("false");
         pref.setPreference(this);
-
         DatabaseManager dbManager = new DatabaseManager(this);
-
         int statusUser = dbManager.verifyLogin(userNameString,passWordString);
         if (statusUser <= 0) {
             clearText();
             Toast.makeText(this, "UserName/Password is incorrect! Please try again!" , Toast.LENGTH_LONG).show();
-        }else {
+        }else{
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }

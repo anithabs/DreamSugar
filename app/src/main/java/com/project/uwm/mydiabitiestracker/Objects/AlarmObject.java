@@ -5,38 +5,23 @@ package com.project.uwm.mydiabitiestracker.Objects;
  */
 
 public class AlarmObject {
-    private int AID;
-    private String time;
-    private String label;
-    private boolean repeat;
-    AlarmObject(int aid, String time, String lbl, boolean rpt){
-        setAID(aid);
-        setRepeat(rpt);
+    private int[] time;
+    private String[] label;;
+    AlarmObject(  String[] lbl,int[] time){
         setLabel(lbl);
         setTime(time);
     }
-    public void setAID(int AID) {
-        this.AID = AID;
-    }
-    public void setLabel(String label) {
+    public void setLabel(String[] label) {
         this.label = label;
     }
-    public void setRepeat(boolean repeat) {
-        this.repeat = repeat;
-    }
-    public void setTime(String time) {
+    public void setTime(int[] time) {
         this.time = time;
     }
-    public int getAID() {
-        return AID;
-    }
-    public String getLabel() {
+    public String[] getLabel() {
         return label;
     }
-    public String getTime() {
+    public int[] getTime() {
         return time;
     }
-    public boolean getRepeat(){
-        return repeat;
-    }
+
 }

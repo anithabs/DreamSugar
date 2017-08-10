@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 public class UserPreference {
 
     private static String userNameField;
+    private static String signout;
     private static String passwordField;
     private static String exerciseField;
     private static String durationField;
@@ -24,6 +25,7 @@ public class UserPreference {
     private static String rprescriptionField;
     private static String rdietField;
     private static String rexerciseField;
+    private static final String SIGN_OUT ="signOut";
     private static final String USER_KEY = "userKey";
     private static final String PASSWORD_KEY ="passwordKey";
     private static final String EXERCISE_TYPE_KEY ="exerciseType";
@@ -42,7 +44,7 @@ public class UserPreference {
         setUserName(pref.getString(USER_KEY,"name"));
         setPassword(pref.getString(PASSWORD_KEY,"password"));
         setAmountOfFoodField(pref.getString(AMOUNTOFFOOD_KEY,"23"));
-        setTypeoffoodField(pref.getString(TYPEOFFOOD_KEY,"tof"));
+        setTypeOfFoodField(pref.getString(TYPEOFFOOD_KEY,"tof"));
         setDosageField(pref.getString(DOSAGE_KEY,"dose"));
         setDurationField(pref.getString(DURATION_KEY,"60"));
         setExerciseField(pref.getString(EXERCISE_TYPE_KEY,"exer"));
@@ -51,11 +53,13 @@ public class UserPreference {
         setRexerciseField(pref.getString(REXERCISE_KEY,"rexer"));
         setRprescriptionField(pref.getString(RPRESCRIPTION_KEY,"pres"));
         setRtestedBGLField(pref.getString(RTESTEDBGVALUE_KEY,"260"));
+        setSignout(pref.getString(SIGN_OUT,"sign"));
     }
 
     public void setPreference(Context context){
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = pref.edit();
+
         editor.putString(USER_KEY, userNameField);
         editor.putString(PASSWORD_KEY,passwordField);
         editor.putString(EXERCISE_TYPE_KEY,exerciseField);
@@ -68,6 +72,7 @@ public class UserPreference {
         editor.putString(REXERCISE_KEY,rexerciseField);
         editor.putString(RPRESCRIPTION_KEY,rprescriptionField);
         editor.putString(RDIET_KEY,rdietField);
+        editor.putString(SIGN_OUT,signout);
         editor.commit();
     }
 
@@ -76,6 +81,13 @@ public class UserPreference {
     }
     public static void setUserName(String userName) {
         passwordField= userName;
+    }
+
+    public static void setSignout(String signout) {
+        UserPreference.signout = signout;
+    }
+    public static String getSignout() {
+        return signout;
     }
 
     public static String getPassword() {
@@ -92,10 +104,10 @@ public class UserPreference {
         return amountOfFoodField;
     }
 
-    public static void setTypeoffoodField(String typeoffood) {
+    public static void setTypeOfFoodField(String typeoffood) {
         typeoffoodField = typeoffood;
     }
-    public static String getTypeoffoodField() {
+    public static String getTypeOfFoodField() {
         return typeoffoodField;
     }
 

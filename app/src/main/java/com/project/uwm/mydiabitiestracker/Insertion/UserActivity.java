@@ -16,10 +16,6 @@ import com.project.uwm.mydiabitiestracker.LoginActivity;
 import com.project.uwm.mydiabitiestracker.R;
 import com.project.uwm.mydiabitiestracker.Objects.UserObject;
 
-/**
- * Created by RON on 7/17/2017.
- */
-
 public class UserActivity extends AppCompatActivity {
     public static final String UA = "UserActivity";
     private DatabaseManager dbManager;

@@ -27,7 +27,7 @@
             android:layout_marginRight="10dp"
             android:paddingTop="5dp"
             android:weightSum="1">
-            <EditText
+            <AutoCompleteTextView
                 android:id = "@+id/prescription_type_value"
                 style="@style/EditTextN"
                 android:ems="10"

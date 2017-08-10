@@ -1,157 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="8dp"
-    android:paddingBottom="@dimen/activity_vertical_margin">
-    <TextView
-        android:id="@+id/new_user_title"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:gravity="center"
-        android:textSize="@dimen/prescription_title_size"
-        android:textStyle="bold"
-        android:textColor="@color/maroon"
-        android:text="@string/add_new_user_title"/>
-    <TextView
-        android:id="@+id/user_name"
-        android:layout_width="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
+        <LinearLayout
+            style="@style/LinearLayout"
+            android:paddingTop="4dp">
+            <TextView
+                style="@style/TextView"
+                android:text="@string/user_name" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:paddingTop="25dp"
-        android:paddingBottom="0dp"
-        android:textColor="@color/maroon"
-        android:textSize="@dimen/hidestringsize"
-        android:text="@string/user_name"/>
-    <EditText
-        android:id="@+id/user_name_value"
-        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <LinearLayout
+            style="@style/LinearLayout"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:paddingTop="5dp"
+            android:weightSum="1">
+            <EditText
+                android:id ="@+id/user_name_value"
+                style="@style/EditTextN"
+                android:ems="10"
+                android:inputType="text"
+                android:imeOptions="actionDone"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="false"
-        android:layout_toRightOf="@+id/user_name"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@id/user_name"
-        android:inputType="textPersonName"/>
-    <TextView
-        android:id="@+id/password"
-        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <LinearLayout
+            style="@style/LinearLayout"
+            android:paddingTop="2dp">
+            <TextView
+                style="@style/TextView"
+                android:text="@string/password_legend" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ahm"
-        android:layout_below="@+id/user_name"
-        android:layout_alignLeft="@+id/user_name"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:textColor="@color/maroon"
-        android:textSize="@dimen/hidestringsize"
-        android:text="@string/password_legend"/>
-    <EditText
-        android:id="@+id/password_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/exercise_type_value"
-        android:layout_toRightOf="@+id/password"
-        android:layout_alignLeft="@id/user_name_value"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@id/password"
-        android:inputType="textPassword"/>
-    <TextView
-        android:id="@+id/first_name"
-        android:paddingTop="3dp"
-        android:paddingBottom="3dp"
-        android:layout_marginTop="@dimen/ahm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/password"
-        android:layout_below="@+id/password"
-        android:textColor="@color/maroon"
-        android:textSize="@dimen/hidestringsize"
-        android:text="@string/firstname" />
-    <EditText
-        android:id="@+id/first_name_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/first_name"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@id/first_name"
-        android:layout_alignLeft="@id/user_name_value"
-        android:layout_below="@+id/password_value"
-        android:inputType="textPersonName"/>
-    <TextView
-        android:id="@+id/last_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ahm"
-        android:layout_below="@+id/first_name"
-        android:layout_alignLeft="@+id/first_name"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:textColor="@color/maroon"
-        android:textSize="@dimen/hidestringsize"
-        android:text="@string/lastname"/>
+        android:gravity="center"
+        android:orientation="horizontal">
+        <LinearLayout
+            style="@style/LinearLayout"
+            android:weightSum="1"
+            android:paddingTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+            <EditText
+                android:id = "@+id/password_value"
+                style="@style/EditTextN"
+                android:inputType="text" />
+        </LinearLayout>
+    </LinearLayout>
 
-    <EditText
-        android:id="@+id/last_name_value"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:layout_below="@+id/first_name_value"
-        android:layout_toRightOf="@+id/last_name"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@id/user_name_value"
-        android:layout_alignBottom="@id/last_name"/>
-    <TextView
-        android:id="@+id/email"
-        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <LinearLayout
+            style="@style/LinearLayout"
+            android:paddingTop="4dp">
+            <TextView
+                style="@style/TextView"
+                android:text="@string/firstname"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ahm"
-        android:layout_below="@+id/last_name"
-        android:layout_alignLeft="@+id/last_name"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:textColor="@color/maroon"
-        android:textSize="@dimen/hidestringsize"
-        android:text="@string/email_address"/>
+        android:gravity="center"
+        android:orientation="horizontal">
+        <LinearLayout
+            style="@style/LinearLayout"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:paddingTop="5dp"
+            android:weightSum="1">
+            <EditText
+                android:id ="@+id/first_name_value"
+                style="@style/EditTextN"
+                android:ems="10"
+                android:inputType="text"
+                android:imeOptions="actionDone"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <LinearLayout
+            style="@style/LinearLayout"
+            android:paddingTop="2dp">
+            <TextView
+                style="@style/TextView"
+                android:text="@string/lastname" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <LinearLayout
+            style="@style/LinearLayout"
+            android:weightSum="1"
+            android:paddingTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+            <EditText
+                android:id ="@+id/last_name_value"
+                style="@style/EditTextN"
+                android:inputType="text" />
+        </LinearLayout>
+    </LinearLayout>
 
-    <EditText
-        android:id="@+id/email_value"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:layout_below="@+id/last_name_value"
-        android:layout_toRightOf="@+id/email"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@id/user_name_value"
-        android:layout_alignBottom="@id/email"/>
-    <Button
-        android:id="@+id/user_add_button"
-        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <LinearLayout
+            style="@style/LinearLayout"
+            android:weightSum="1"
+            android:paddingTop="2dp">
+            <TextView
+                style="@style/TextView"
+                android:text="@string/email_address" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ADD"
-        android:onClick="newUserCreate"
-        android:layout_alignBaseline="@+id/exercise_back_button"
-        android:layout_alignBottom="@+id/exercise_back_button"
-        android:layout_marginLeft="80dp"
-        />
-    <Button
-        android:id="@+id/exercise_back_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
-        android:text="Back"
-        android:onClick="goBack"
-        android:layout_below="@+id/email_value"
-        android:layout_toRightOf="@+id/user_add_button"
-        android:layout_toEndOf="@+id/user_add_button"
-        android:layout_marginLeft="34dp"
-        android:layout_marginStart="34dp" />
+        android:gravity="center"
+        android:orientation="horizontal">
+        <LinearLayout
+            style="@style/LinearLayout"
+            android:paddingTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:weightSum="1">
+            <EditText
+                android:id ="@+id/email_value"
+                style="@style/EditTextN" />
+        </LinearLayout>
+    </LinearLayout>
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <LinearLayout
+            style="@style/LinearLayout"
+            android:paddingTop="30dp"
+            android:weightSum="1">
+            <Button
+                android:id ="@+id/user_add_button"
+                style="@style/Button"
+                android:layout_marginLeft="80dp"
+                android:onClick="newUserCreate"
+                android:text="ADD"
+                android:visibility="visible" />
+        </LinearLayout>
+        <LinearLayout
+            style="@style/LinearLayout"
+            android:paddingTop="30dp"
+            android:weightSum="1">
+            <Button
+                style="@style/Button"
+                android:onClick="goBack"
+                android:text="Back"
+                android:layout_marginLeft="20dp"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

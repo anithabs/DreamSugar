@@ -14,11 +14,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -38,14 +36,17 @@ public class FoodRecordsFragment extends Fragment  {
     private OnFragmentInteractionListener mListener;
 
     ArrayList<FoodConsumedObject> foodList = new ArrayList<>();
-    ArrayList<FoodConsumedObject> foodListtemp = new ArrayList<>();
+    ArrayList<FoodConsumedObject> foodListTemp = new ArrayList<>();
+    ArrayList<FoodConsumedObject> foodListFromDate = new ArrayList<>();
+    ArrayList<FoodConsumedObject> foodListToDate = new ArrayList<>();
+    ArrayList<FoodConsumedObject> foodListFromTime = new ArrayList<>();
+    ArrayList<FoodConsumedObject> foodListToTime = new ArrayList<>();
+    ArrayList<FoodConsumedObject> foodListText = new ArrayList<>();
+
     DatabaseManager dbManager;
     private RecyclerView rvFood;
     private RecyclerView.Adapter fAdaptor;
     private RecyclerView.LayoutManager fLayoutManager;
-    private Switch checkSwitch;
-    private CheckBox weekChkBox;
-    private CheckBox dayChkBox;
     String userName;
     UserPreference pref;
     public EditText editTextFromDate,editTextToDate,editTextFromTime,editTextToTime;
@@ -88,6 +89,9 @@ public class FoodRecordsFragment extends Fragment  {
                 hour = hr;
                 minute = min ;
                 updateDisplayFromTime();
+                foodList = FromTime(hr,min);
+                fAdaptor = new FoodAdapter(getActivity(), foodList);
+                rvFood.setAdapter(fAdaptor);
             }
         };
         to_timeListener = new TimePickerDialog.OnTimeSetListener() {
@@ -105,6 +109,9 @@ public class FoodRecordsFragment extends Fragment  {
                 month = mnth+1;
                 day = monthday;
                 updateFromDisplay();
+                foodList = FromDate(year,  month,  day);
+                fAdaptor = new FoodAdapter(getActivity(), foodList);
+                rvFood.setAdapter(fAdaptor);
             }
         };
         to_dateListener = new DatePickerDialog.OnDateSetListener() {
@@ -114,9 +121,11 @@ public class FoodRecordsFragment extends Fragment  {
                 month = mnth+1;
                 day = monthday;
                 updateToDisplay();
+                foodList = ToDate(year,  month,  day);
+                fAdaptor = new FoodAdapter(getActivity(), foodList);
+                rvFood.setAdapter(fAdaptor);
             }
         };
-
         editTextFromDate.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Calendar calender = Calendar.getInstance(TimeZone.getDefault());
@@ -151,31 +160,40 @@ public class FoodRecordsFragment extends Fragment  {
 
         editTextSearch.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                String[] stringArray = new String[2];
                 String  firsthalf =null;
                 String secondhalf =null;
-
                 foodList.clear();
-                foodListtemp = dbManager.selectAllFoodDetails(userName);
+                foodListTemp = dbManager.selectAllFoodDetails(userName);
                if(s.toString().contains(" ")) {
-                    stringArray = s.toString().split(" ");
-                    firsthalf = stringArray[0];
-                   secondhalf = stringArray[2];
-
+                   String[] stringArray = s.toString().split(" ");
+                   if(stringArray.length > 2){
+                       firsthalf = stringArray[0];
+                       secondhalf = stringArray[2];
+                   }
                 }
-
-                if(s.toString().contains("and") && firsthalf != null && secondhalf != null  ){
-                    for(int i = 0 ; i < foodListtemp.size() ; i++)
-                        if(foodListtemp.get(i).getTypeOfFood().contains(firsthalf) && foodListtemp.get(i).getTypeOfFood().contains(secondhalf)) {
-                            foodList.add(foodListtemp.get(i));
+                if(s.toString().contains(" and ") && secondhalf !=null  ){
+                    for(int i = 0 ; i < foodListTemp.size() ; i++)
+                        if(foodListTemp.get(i).getTypeOfFood().contains(firsthalf) && foodListTemp.get(i).getTypeOfFood().contains(secondhalf)) {
+                            foodListText.add(foodListTemp.get(i));
                         }
-                } else {
-                    for(int i = 0 ; i < foodListtemp.size() ; i++)
-                        if(foodListtemp.get(i).getTypeOfFood().contains(s.toString()) )
-                            foodList.add(foodListtemp.get(i));
+                } else if(s.toString().contains(" or ") && secondhalf !=null  ){
+                    for(int i = 0 ; i < foodListTemp.size() ; i++)
+                        if(foodListTemp.get(i).getTypeOfFood().contains(firsthalf) || foodListTemp.get(i).getTypeOfFood().contains(secondhalf)) {
+                            foodListText.add(foodListTemp.get(i));
+                        }
+                }else {
+                    for(int i = 0 ; i < foodListTemp.size() ; i++)
+                        if(foodListTemp.get(i).getTypeOfFood().contains(s.toString()) )
+                            foodListText.add(foodListTemp.get(i));
                 }
+                foodList = foodListText;
                 fAdaptor = new FoodAdapter(getActivity(), foodList);
                 rvFood.setAdapter(fAdaptor);
+
+                editTextFromDate.setText("");
+                editTextToDate.setText("");
+                editTextFromTime.setText("");
+                editTextToTime.setText("");
             }
             public void beforeTextChanged(CharSequence s, int start,
                                           int count, int after) {
@@ -185,7 +203,89 @@ public class FoodRecordsFragment extends Fragment  {
 
             }
         });
+
         return rootView;
+
+    }
+
+    public ArrayList<FoodConsumedObject> FromDate(int year, int month, int date){
+        String y, m, d;
+        foodListFromDate.clear();
+        ArrayList<FoodConsumedObject> FromDate = new ArrayList<>();
+        if(foodListText.size() ==0){
+            FromDate = dbManager.selectAllFoodDetails(userName);
+        }else
+            FromDate = foodListText;
+         for( int i = 0 ; i < FromDate.size() ; i++){
+             String sdate = FromDate.get(i).getDate();
+             String[] dateArray = sdate.split("-");
+             y = dateArray[0];
+             m = dateArray[1];
+             d = dateArray[2];
+             if(Integer.parseInt(y) > year) {
+                 foodListFromDate.add(FromDate.get(i));
+             }else if(Integer.parseInt(y) >= year && Integer.parseInt(m) > month ){
+                 foodListFromDate.add(FromDate.get(i));
+             }else if (Integer.parseInt(y) >= year && Integer.parseInt(m) >= month && Integer.parseInt(d) >= date){
+                 foodListFromDate.add(FromDate.get(i));
+             }
+         }
+        return  foodListFromDate;
+    }
+    public ArrayList<FoodConsumedObject> ToDate(int year, int month, int date){
+        String y, m, d;
+        foodListToDate.clear();
+        ArrayList<FoodConsumedObject> ToDate = new ArrayList<>();
+        if(foodListFromDate.size() !=0) {
+            ToDate = foodListFromDate;}
+        else if (foodListText.size() !=0) {
+            ToDate = foodListText;
+        }else{
+            ToDate = dbManager.selectAllFoodDetails(userName);
+        }
+
+        for( int i = 0 ; i < ToDate.size() ; i++){
+            String sdate = ToDate.get(i).getDate();
+            String[] dateArray = sdate.split("-");
+            y = dateArray[0];
+            m = dateArray[1];
+            d = dateArray[2];
+            if(Integer.parseInt(y) < year) {
+                foodListToDate.add(ToDate.get(i));
+            }else if(Integer.parseInt(y) <= year && Integer.parseInt(m) < month ){
+                foodListToDate.add(ToDate.get(i));
+            }else if (Integer.parseInt(y) <= year && Integer.parseInt(m) <= month && Integer.parseInt(d) <= date){
+                foodListToDate.add(ToDate.get(i));
+            }
+        }
+        return  foodListToDate;
+    }
+
+    public ArrayList<FoodConsumedObject> FromTime(int hour, int min){
+        String h, m;
+        foodListFromTime.clear();
+        ArrayList<FoodConsumedObject> FromTime = new ArrayList<>();
+        if(foodListToDate.size() !=0){
+            FromTime =foodListToDate;
+        }else if(foodListFromDate.size() !=0) {
+            FromTime = foodListFromDate;
+        }else if(foodListText.size() !=0){
+            FromTime = foodListText;
+        }else {
+            FromTime = dbManager.selectAllFoodDetails(userName);
+        }
+        for( int i = 0 ; i < FromTime.size() ; i++){
+            String sdate = FromTime.get(i).getTime();
+            String[] dateArray = sdate.split(":");
+            h = dateArray[0];
+            m = dateArray[1];
+            if(Integer.parseInt(h) > hour) {
+                foodListFromTime.add(FromTime.get(i));
+            }else if(Integer.parseInt(h) >= hour && Integer.parseInt(m) > min ){
+                foodListFromTime.add(FromTime.get(i));
+            }
+        }
+        return  foodListFromTime;
     }
     @Override
     public void onAttach(Context context) {

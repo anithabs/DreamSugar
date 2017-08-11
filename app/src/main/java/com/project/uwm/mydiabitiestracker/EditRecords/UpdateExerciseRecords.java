@@ -30,7 +30,7 @@ public class UpdateExerciseRecords extends AppCompatActivity {
         exerciseTime = extras.getString("EXERCISE_TIME");
         exerciseDate = extras.getString("EXERCISE_DATE");
         userName = pref.getUserName();
-        DBManager = new DatabaseManager(this);
+        DBManager= new DatabaseManager(this);
 
         ero = DBManager.selectExerciseByTime(exerciseTime,exerciseDate,userName);
         typeOfExercise = (EditText) findViewById(R.id.update_exercise_type_value);

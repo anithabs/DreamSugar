@@ -156,7 +156,7 @@ public class PrescriptionRecordsFragment extends Fragment /*implements View.OnCl
 
         editTextSearch.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                presList = dbManager.selectSearchPrescriptionRecord(userName,s.toString());
+                presList = dbManager.selectAllPrescriptionDetails(userName);
                 pAdaptor = new PrescriptionAdaptor(getActivity(), presList);
                 rvPres.setAdapter(pAdaptor);
             }

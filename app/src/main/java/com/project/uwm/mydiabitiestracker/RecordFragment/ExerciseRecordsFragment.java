@@ -149,7 +149,7 @@ public class ExerciseRecordsFragment extends Fragment /*implements View.OnClickL
 
         editTextSearch.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                exerciseList = dbManager.selectSearchExerciseDetails(userName,s.toString());
+                exerciseList = dbManager.selectAllExerciseDetails(userName);
                 eAdaptor = new ExerciseAdapter(getActivity(), exerciseList);
                 rvExercise.setAdapter(eAdaptor);
             }

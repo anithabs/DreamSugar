@@ -497,7 +497,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.close();
         return pro;
     }
-
     // select All records
     public ArrayList<FoodConsumedObject> selectAllFoodDetails(String username) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -602,7 +601,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     //select week record
-    public ArrayList<FoodConsumedObject> selectWeekFoodDetails( String username) {
+  /*  public ArrayList<FoodConsumedObject> selectWeekFoodDetails( String username) {
         SQLiteDatabase db = this.getWritableDatabase();
         int fvalue =0 ;
         String date =" ";
@@ -704,9 +703,9 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return ArrayExercise;
     }
 
-
+*/
     //select week record
-    public ArrayList<FoodConsumedObject> selectSearchFoodDetails( String username, String hint) {
+  /*  public ArrayList<FoodConsumedObject> selectSearchFoodDetails( String username, String hint) {
         SQLiteDatabase db = this.getWritableDatabase();
         int fvalue =0 ;
         String date =" ";
@@ -807,8 +806,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.close();
         return ArrayExercise;
     }
-
-    //select day record
+*/
+  /*  //select day record
     public ArrayList<GlucoseReadingObject> selectOneGlucoseDetails(String username ) {
         SQLiteDatabase db = this.getWritableDatabase();
         int gvalue =0 ;
@@ -911,7 +910,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return ArrayExercise;
 
     }
-
+*/
     public ArrayList<ReminderObject> getReminders(){
         SQLiteDatabase db = this.getWritableDatabase();
         int pvalue =0 ;

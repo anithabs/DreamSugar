@@ -146,7 +146,7 @@ public class GlucoseRecordsFragment extends Fragment /*implements View.OnClickLi
         rvGlucose.setLayoutManager(gLayoutManager);
         editTextSearch.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                glucoseList = dbManager.selectSearchGlucoseDetails(userName,s.toString());
+                glucoseList = dbManager.selectAllGlucoseDetails(userName);
                 gAdaptor = new GlucoseAdapter(getActivity(), glucoseList);
                 rvGlucose.setAdapter(gAdaptor);
             }

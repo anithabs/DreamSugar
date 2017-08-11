@@ -68,7 +68,7 @@ public class PrescriptionActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker datePicker, int yr, int mnth, int monthday) {
                 year =yr;
-                month = mnth;
+                month = mnth + 1;
                 day = monthday;
                 updateToDisplayToDay();
             }
@@ -116,14 +116,17 @@ public class PrescriptionActivity extends AppCompatActivity {
         Log.v(PA, "inside PrescriptionActivity:onResume()\n");
     }
     protected void onPause() {
+        dbManager.close();
         super.onPause();
         Log.v(PA, "inside PrescriptionActivity:onPause()\n");
     }
     protected void onStop() {
+        dbManager.close();
         super.onStop();
         Log.v(PA, "inside PrescriptionActivity:onStop()\n");
     }
     protected void onDestroy() {
+        dbManager.close();
         super.onDestroy();
         Log.v(PA, "inside PrescriptionActivity:onDestroy()\n");
     }

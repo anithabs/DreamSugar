@@ -112,14 +112,17 @@ public class ExerciseActivity extends AppCompatActivity {
     }
     protected void onPause() {
         super.onPause();
+        dbManager.close();
         Log.v(EA, ":onPause()\n");
     }
     protected void onStop() {
         super.onStop();
+        dbManager.close();
         Log.v(EA, ":onStop()\n");
     }
     protected void onDestroy() {
         super.onDestroy();
+        dbManager.close();
         Log.v(EA, ":onDestroy()\n");
     }
     public void AddWords() {

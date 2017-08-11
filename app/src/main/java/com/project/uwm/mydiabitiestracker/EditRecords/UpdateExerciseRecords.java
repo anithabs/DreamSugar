@@ -44,6 +44,18 @@ public class UpdateExerciseRecords extends AppCompatActivity {
         etExerciseDate.setFocusable(false);
         etExerciseTime.setFocusable(false);
     }
+    protected void onPause() {
+        DBManager.close();
+        super.onPause();
+    }
+    protected void onStop() {
+        DBManager.close();
+        super.onStop();
+    }
+    protected void onDestroy() {
+        DBManager.close();
+        super.onDestroy();
+    }
 
     public void exerciseDelete(View view){
         userName = pref.getUserName();

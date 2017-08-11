@@ -22,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     UserPreference pref;
     public static final String LA = "LoginActivity";
     public String Signout;
+    DatabaseManager dbManager;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,13 +53,16 @@ public class LoginActivity extends AppCompatActivity {
     }
     protected void onPause() {
         super.onPause();
+        dbManager.close();
         Log.v(LA, "inside LoginActivity:onPause()\n");
     }
     protected void onStop() {
+        dbManager.close();
         super.onStop();
         Log.v(LA, "inside LoginActivity:onStop()\n");
     }
     protected void onDestroy() {
+        dbManager.close();
         super.onDestroy();
         Log.v(LA, "inside LoginActivity:onDestroy()\n");
     }
@@ -72,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
         pref.setPassword(passWordString);
         pref.setSignout("false");
         pref.setPreference(this);
-        DatabaseManager dbManager = new DatabaseManager(this);
+        dbManager = new DatabaseManager(this);
         int statusUser = dbManager.verifyLogin(userNameString,passWordString);
         if (statusUser <= 0) {
             clearText();

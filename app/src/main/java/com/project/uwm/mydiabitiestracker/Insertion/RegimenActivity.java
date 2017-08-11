@@ -9,6 +9,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import com.project.uwm.mydiabitiestracker.DatabaseManager;
 import com.project.uwm.mydiabitiestracker.Objects.RegimenReadingObject;
 import com.project.uwm.mydiabitiestracker.Objects.UserPreference;
@@ -66,7 +67,7 @@ public class RegimenActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker datePicker, int yr, int mnth, int monthday) {
                 year =yr;
-                month = mnth;
+                month = mnth + 1;
                 day = monthday;
                 updateToDisplayToDay();
             }
@@ -97,6 +98,19 @@ public class RegimenActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    protected void onPause() {
+        dbManager.close();
+        super.onPause();
+    }
+    protected void onStop() {
+        dbManager.close();
+        super.onStop();
+    }
+    protected void onDestroy() {
+        dbManager.close();
+        super.onDestroy();
     }
     public void regimenInsert(View view){
         etTestedBGValue = (EditText)findViewById(R.id.tested_bgl_value);

@@ -42,7 +42,18 @@ public class VeiwRegimen extends AppCompatActivity {
         etDateValue.setFocusable(false);
         etTimeValue.setFocusable(false);
     }
-
+    protected void onPause() {
+        dbManager.close();
+        super.onPause();
+    }
+    protected void onStop() {
+        dbManager.close();
+        super.onStop();
+    }
+    protected void onDestroy() {
+        dbManager.close();
+        super.onDestroy();
+    }
    public void goBack(View view){
        this.finish();
    }

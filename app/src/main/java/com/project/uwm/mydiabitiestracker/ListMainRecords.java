@@ -111,7 +111,15 @@ public class ListMainRecords extends AppCompatActivity implements AdapterView.On
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
-
+    protected void onPause() {
+        super.onPause();
+    }
+    protected void onStop() {
+        super.onStop();
+    }
+    protected void onDestroy() {
+        super.onDestroy();
+    }
     public void onBackPressed(View v) {
         if (getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();

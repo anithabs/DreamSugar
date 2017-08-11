@@ -32,6 +32,20 @@ public class FoodGraphFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
+    @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

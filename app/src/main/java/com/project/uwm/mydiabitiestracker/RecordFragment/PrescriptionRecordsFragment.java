@@ -107,7 +107,7 @@ public class PrescriptionRecordsFragment extends Fragment /*implements View.OnCl
             @Override
             public void onDateSet(DatePicker datePicker, int yr, int mnth, int monthday) {
                 year =yr;
-                month = mnth;
+                month = mnth+1;
                 day = monthday;
                 updateFromDisplay();
             }
@@ -116,7 +116,7 @@ public class PrescriptionRecordsFragment extends Fragment /*implements View.OnCl
             @Override
             public void onDateSet(DatePicker datePicker, int yr, int mnth, int monthday) {
                 year =yr;
-                month = mnth;
+                month = mnth+1;
                 day = monthday;
                 updateToDisplay();
             }
@@ -179,6 +179,21 @@ public class PrescriptionRecordsFragment extends Fragment /*implements View.OnCl
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }*/
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
     }
 
 

@@ -73,4 +73,17 @@ public class UpdatePrescriptionRecords extends AppCompatActivity {
         }
         DBManager.close();
     }
+
+    protected void onPause() {
+        DBManager.close();
+        super.onPause();
+    }
+    protected void onStop() {
+        DBManager.close();
+        super.onStop();
+    }
+    protected void onDestroy() {
+        DBManager.close();
+        super.onDestroy();
+    }
 }

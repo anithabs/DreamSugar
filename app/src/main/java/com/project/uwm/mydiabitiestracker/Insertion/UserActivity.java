@@ -38,18 +38,22 @@ public class UserActivity extends AppCompatActivity {
         Log.v(UA, "inside UserActivity:onRestart()\n");
     }
     protected void onResume() {
+
         super.onResume();
         Log.v(UA, "inside UserActivity:onResume()\n");
     }
     protected void onPause() {
+        dbManager.close();
         super.onPause();
         Log.v(UA, "inside UserActivity:onPause()\n");
     }
     protected void onStop() {
+        dbManager.close();
         super.onStop();
         Log.v(UA, "inside UserActivity:onStop()\n");
     }
     protected void onDestroy() {
+        dbManager.close();
         super.onDestroy();
         Log.v(UA, "inside UserActivity:onDestroy()\n");
     }

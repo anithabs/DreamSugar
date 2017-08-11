@@ -70,7 +70,7 @@ public class FoodInsertActivity extends AppCompatActivity implements AutoComplet
             @Override
             public void onDateSet(DatePicker datePicker, int yr, int mnth, int monthday) {
                 year =yr;
-                month = mnth;
+                month = mnth +1;
                 day = monthday;
                 updateToDisplayToDay();
             }
@@ -123,19 +123,21 @@ public class FoodInsertActivity extends AppCompatActivity implements AutoComplet
     }
     @Override
     public void onPause() {
-
+        dbManager.close();
         super.onPause();
         Log.v(FI, "inside FoodInsertActivity:onPause()\n");
     }
     @Override
     public void onStop() {
         super.onStop();
+        dbManager.close();
         //savePrefs();
         Log.v(FI, "inside FoodInsertActivity:onStop()\n");
     }
     @Override
     public void onDestroy() {
         super.onDestroy();
+        dbManager.close();
         Log.v(FI, "inside FoodInsertActivity:onDestroy()\n");
 
     }

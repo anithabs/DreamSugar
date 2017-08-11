@@ -89,7 +89,7 @@ public class GlucoseInsertActivity extends AppCompatActivity implements AdapterV
                 @Override
                 public void onDateSet(DatePicker datePicker, int yr, int mnth, int monthday) {
                     year =yr;
-                    month = mnth;
+                    month = mnth+1;
                     day = monthday;
                     updateToDisplayToDay();
                 }
@@ -133,14 +133,17 @@ public class GlucoseInsertActivity extends AppCompatActivity implements AdapterV
         Log.v(GI, "inside GlucoseInsertActivity:onResume()\n");
     }
     protected void onPause() {
+        dbManager.close();
         super.onPause();
         Log.v(GI, "inside GlucoseInsertActivity:onPause()\n");
     }
     protected void onStop() {
+        dbManager.close();
         super.onStop();
         Log.v(GI, "inside GlucoseInsertActivity:onStop()\n");
     }
     protected void onDestroy() {
+        dbManager.close();
         super.onDestroy();
         Log.v(GI, "inside GlucoseInsertActivity:onDestroy()\n");
     }

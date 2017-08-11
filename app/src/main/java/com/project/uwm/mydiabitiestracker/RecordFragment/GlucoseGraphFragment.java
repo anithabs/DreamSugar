@@ -81,6 +81,20 @@ public class GlucoseGraphFragment extends Fragment {
     }
 
     @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+    }
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
     }

@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         password = pref.getPassword();
         signoutStatus = pref.getSignout();
 
-        DatabaseManager dbManager = new DatabaseManager(this);
+        dbManager = new DatabaseManager(this);
 
         int statusUser = dbManager.verifyLogin(userName,password);
         if (statusUser <= 0 ||signoutStatus.equals("true")) {
@@ -96,14 +96,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.v(MA, "inside MainActivity:onResume()\n");
     }
     protected void onPause() {
+        dbManager.close();
         super.onPause();
         Log.v(MA, "inside MainActivity:onPause()\n");
     }
     protected void onStop() {
+        dbManager.close();
         super.onStop();
         Log.v(MA, "inside MainActivity:onStop()\n");
     }
     protected void onDestroy() {
+        dbManager.close();
         super.onDestroy();
         Log.v(MA, "inside MainActivity:onDestroy()\n");
     }
@@ -142,7 +145,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

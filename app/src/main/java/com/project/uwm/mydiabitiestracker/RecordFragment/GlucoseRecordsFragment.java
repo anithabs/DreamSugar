@@ -98,7 +98,7 @@ public class GlucoseRecordsFragment extends Fragment /*implements View.OnClickLi
             @Override
             public void onDateSet(DatePicker datePicker, int yr, int mnth, int monthday) {
                 year =yr;
-                month = mnth;
+                month = mnth+1;
                 day = monthday;
                 updateFromDisplay();
             }
@@ -107,7 +107,7 @@ public class GlucoseRecordsFragment extends Fragment /*implements View.OnClickLi
             @Override
             public void onDateSet(DatePicker datePicker, int yr, int mnth, int monthday) {
                 year =yr;
-                month = mnth;
+                month = mnth+1;
                 day = monthday;
                 updateToDisplay();
             }
@@ -171,6 +171,21 @@ public class GlucoseRecordsFragment extends Fragment /*implements View.OnClickLi
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
     }
 
     private void updateFromDisplay(){

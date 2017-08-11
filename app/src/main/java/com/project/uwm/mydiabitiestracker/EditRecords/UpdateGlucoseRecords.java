@@ -55,6 +55,19 @@ public class UpdateGlucoseRecords extends AppCompatActivity {
         Toast.makeText(this,"Data Deleted!",Toast.LENGTH_LONG).show();
     }
 
+    protected void onPause() {
+        DBManager.close();
+        super.onPause();
+    }
+    protected void onStop() {
+        DBManager.close();
+        super.onStop();
+    }
+    protected void onDestroy() {
+        DBManager.close();
+        super.onDestroy();
+    }
+
     public void glucoseUpdate(View v) {
         DBManager = new DatabaseManager(this);
         glucoseLevel = (EditText)findViewById(R.id.update_glucose_value);

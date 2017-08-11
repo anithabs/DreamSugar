@@ -38,6 +38,7 @@ public class FoodRecordsFragment extends Fragment  {
     private OnFragmentInteractionListener mListener;
 
     ArrayList<FoodConsumedObject> foodList = new ArrayList<>();
+    ArrayList<FoodConsumedObject> foodListtemp = new ArrayList<>();
     DatabaseManager dbManager;
     private RecyclerView rvFood;
     private RecyclerView.Adapter fAdaptor;
@@ -101,7 +102,7 @@ public class FoodRecordsFragment extends Fragment  {
             @Override
             public void onDateSet(DatePicker datePicker, int yr, int mnth, int monthday) {
                 year =yr;
-                month = mnth;
+                month = mnth+1;
                 day = monthday;
                 updateFromDisplay();
             }
@@ -110,7 +111,7 @@ public class FoodRecordsFragment extends Fragment  {
             @Override
             public void onDateSet(DatePicker datePicker, int yr, int mnth, int monthday) {
                 year =yr;
-                month = mnth;
+                month = mnth+1;
                 day = monthday;
                 updateToDisplay();
             }
@@ -150,7 +151,29 @@ public class FoodRecordsFragment extends Fragment  {
 
         editTextSearch.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                foodList = dbManager.selectSearchFoodDetails(userName,s.toString());
+                String[] stringArray = new String[2];
+                String  firsthalf =null;
+                String secondhalf =null;
+
+                foodList.clear();
+                foodListtemp = dbManager.selectAllFoodDetails(userName);
+               if(s.toString().contains(" ")) {
+                    stringArray = s.toString().split(" ");
+                    firsthalf = stringArray[0];
+                   secondhalf = stringArray[2];
+
+                }
+
+                if(s.toString().contains("and") && firsthalf != null && secondhalf != null  ){
+                    for(int i = 0 ; i < foodListtemp.size() ; i++)
+                        if(foodListtemp.get(i).getTypeOfFood().contains(firsthalf) && foodListtemp.get(i).getTypeOfFood().contains(secondhalf)) {
+                            foodList.add(foodListtemp.get(i));
+                        }
+                } else {
+                    for(int i = 0 ; i < foodListtemp.size() ; i++)
+                        if(foodListtemp.get(i).getTypeOfFood().contains(s.toString()) )
+                            foodList.add(foodListtemp.get(i));
+                }
                 fAdaptor = new FoodAdapter(getActivity(), foodList);
                 rvFood.setAdapter(fAdaptor);
             }
@@ -171,6 +194,22 @@ public class FoodRecordsFragment extends Fragment  {
             mListener = (OnFragmentInteractionListener) context;
         }
     }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();

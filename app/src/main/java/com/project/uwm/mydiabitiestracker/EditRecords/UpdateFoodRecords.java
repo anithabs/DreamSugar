@@ -45,6 +45,19 @@ public class UpdateFoodRecords extends AppCompatActivity {
         etFoodTime.setFocusable(false);
 
     }
+
+    protected void onPause() {
+        DBManager.close();
+        super.onPause();
+    }
+    protected void onStop() {
+        DBManager.close();
+        super.onStop();
+    }
+    protected void onDestroy() {
+        DBManager.close();
+        super.onDestroy();
+    }
     public void foodDelete(View view){
         userName = pref.getUserName();
         DBManager.deleteFoodByDateTime(foodTime,foodDate,userName);

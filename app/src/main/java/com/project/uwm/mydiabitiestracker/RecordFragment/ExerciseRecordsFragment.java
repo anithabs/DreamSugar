@@ -100,7 +100,7 @@ public class ExerciseRecordsFragment extends Fragment /*implements View.OnClickL
             @Override
             public void onDateSet(DatePicker datePicker, int yr, int mnth, int monthday) {
                 year =yr;
-                month = mnth;
+                month = mnth + 1;
                 day = monthday;
                 updateFromDisplay();
             }
@@ -109,7 +109,7 @@ public class ExerciseRecordsFragment extends Fragment /*implements View.OnClickL
             @Override
             public void onDateSet(DatePicker datePicker, int yr, int mnth, int monthday) {
                 year =yr;
-                month = mnth;
+                month = mnth+1;
                 day = monthday;
                 updateToDisplay();
             }
@@ -177,6 +177,21 @@ public class ExerciseRecordsFragment extends Fragment /*implements View.OnClickL
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
     }
 
     private void updateFromDisplay(){

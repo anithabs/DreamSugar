@@ -89,9 +89,10 @@ public class FoodRecordsFragment extends Fragment  {
                 hour = hr;
                 minute = min ;
                 updateDisplayFromTime();
-                foodList = FromTime(hr,min);
+                foodList = FromTime(hour,minute);
                 fAdaptor = new FoodAdapter(getActivity(), foodList);
                 rvFood.setAdapter(fAdaptor);
+                editTextToTime.setText("");
             }
         };
         to_timeListener = new TimePickerDialog.OnTimeSetListener() {
@@ -100,6 +101,10 @@ public class FoodRecordsFragment extends Fragment  {
                 hour = hr;
                 minute = min ;
                 updateDisplayToTime();
+                foodList = ToTime(hour,minute);
+                fAdaptor = new FoodAdapter(getActivity(), foodList);
+                rvFood.setAdapter(fAdaptor);
+
             }
         };
         from_dateListener = new DatePickerDialog.OnDateSetListener() {
@@ -112,6 +117,9 @@ public class FoodRecordsFragment extends Fragment  {
                 foodList = FromDate(year,  month,  day);
                 fAdaptor = new FoodAdapter(getActivity(), foodList);
                 rvFood.setAdapter(fAdaptor);
+                editTextToTime.setText("");
+                editTextFromTime.setText("");
+                editTextToDate.setText("");
             }
         };
         to_dateListener = new DatePickerDialog.OnDateSetListener() {
@@ -124,6 +132,8 @@ public class FoodRecordsFragment extends Fragment  {
                 foodList = ToDate(year,  month,  day);
                 fAdaptor = new FoodAdapter(getActivity(), foodList);
                 rvFood.setAdapter(fAdaptor);
+                editTextToTime.setText("");
+                editTextFromTime.setText("");
             }
         };
         editTextFromDate.setOnClickListener(new View.OnClickListener() {
@@ -212,10 +222,10 @@ public class FoodRecordsFragment extends Fragment  {
         String y, m, d;
         foodListFromDate.clear();
         ArrayList<FoodConsumedObject> FromDate = new ArrayList<>();
-        if(foodListText.size() ==0){
-            FromDate = dbManager.selectAllFoodDetails(userName);
-        }else
+        if(foodListText.size() !=0 || editTextSearch.getText().toString()!= null){
             FromDate = foodListText;
+        }else
+            FromDate = dbManager.selectAllFoodDetails(userName);
          for( int i = 0 ; i < FromDate.size() ; i++){
              String sdate = FromDate.get(i).getDate();
              String[] dateArray = sdate.split("-");
@@ -236,13 +246,12 @@ public class FoodRecordsFragment extends Fragment  {
         String y, m, d;
         foodListToDate.clear();
         ArrayList<FoodConsumedObject> ToDate = new ArrayList<>();
-        if(foodListFromDate.size() !=0) {
-            ToDate = foodListFromDate;}
-        else if (foodListText.size() !=0) {
+        if(foodListFromDate.size() !=0 ||  editTextFromDate.getText().toString()!= null) {
+            ToDate = foodListFromDate;
+        }else if(foodListText.size() !=0 || editTextSearch.getText().toString()!= null){
             ToDate = foodListText;
-        }else{
+        }else
             ToDate = dbManager.selectAllFoodDetails(userName);
-        }
 
         for( int i = 0 ; i < ToDate.size() ; i++){
             String sdate = ToDate.get(i).getDate();
@@ -265,15 +274,15 @@ public class FoodRecordsFragment extends Fragment  {
         String h, m;
         foodListFromTime.clear();
         ArrayList<FoodConsumedObject> FromTime = new ArrayList<>();
-        if(foodListToDate.size() !=0){
+        if(foodListToDate.size() !=0 || editTextToDate.getText().toString()!= null){
             FromTime =foodListToDate;
-        }else if(foodListFromDate.size() !=0) {
+        }else if(foodListFromDate.size() !=0 ||  editTextFromDate.getText().toString()!= null) {
             FromTime = foodListFromDate;
-        }else if(foodListText.size() !=0){
+        }else if(foodListText.size() !=0 || editTextSearch.getText().toString()!= null){
             FromTime = foodListText;
-        }else {
+        }else
             FromTime = dbManager.selectAllFoodDetails(userName);
-        }
+
         for( int i = 0 ; i < FromTime.size() ; i++){
             String sdate = FromTime.get(i).getTime();
             String[] dateArray = sdate.split(":");
@@ -281,11 +290,40 @@ public class FoodRecordsFragment extends Fragment  {
             m = dateArray[1];
             if(Integer.parseInt(h) > hour) {
                 foodListFromTime.add(FromTime.get(i));
-            }else if(Integer.parseInt(h) >= hour && Integer.parseInt(m) > min ){
+            }else if(Integer.parseInt(h) >= hour && Integer.parseInt(m) >= min ){
                 foodListFromTime.add(FromTime.get(i));
             }
         }
         return  foodListFromTime;
+    }
+
+    public ArrayList<FoodConsumedObject> ToTime(int hour, int min){
+        String h, m;
+        foodListToTime.clear();
+        ArrayList<FoodConsumedObject> ToTime = new ArrayList<>();
+        if(foodListFromTime.size() !=0 || editTextFromTime.getText().toString()!= null){
+            ToTime =foodListFromTime;
+        } else if(foodListToDate.size() !=0 || editTextToDate.getText().toString()!= null){
+            ToTime =foodListToDate;
+        }else if(foodListFromDate.size() !=0 ||  editTextFromDate.getText().toString()!= null) {
+            ToTime = foodListFromDate;
+        }else if(foodListText.size() !=0 || editTextSearch.getText().toString()!= null){
+            ToTime = foodListText;
+        }else
+            ToTime = dbManager.selectAllFoodDetails(userName);
+
+        for( int i = 0 ; i < ToTime.size() ; i++){
+            String sdate = ToTime.get(i).getTime();
+            String[] dateArray = sdate.split(":");
+            h = dateArray[0];
+            m = dateArray[1];
+            if(Integer.parseInt(h) < hour) {
+                foodListToTime.add(ToTime.get(i));
+            }else if(Integer.parseInt(h) <= hour && Integer.parseInt(m) < min ){
+                foodListToTime.add(ToTime.get(i));
+            }
+        }
+        return  foodListToTime;
     }
     @Override
     public void onAttach(Context context) {

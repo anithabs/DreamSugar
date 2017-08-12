@@ -32,6 +32,13 @@ public class GlucoseRecordsFragment extends Fragment /*implements View.OnClickLi
     //private BottomSheetDialog bottomSheetDialog;
     private OnFragmentInteractionListener gmListener;
     ArrayList<GlucoseReadingObject> glucoseList = new ArrayList<>();
+    ArrayList<GlucoseReadingObject> glucoseListTemp = new ArrayList<>();
+    ArrayList<GlucoseReadingObject> glucoseListFromDate = new ArrayList<>();
+    ArrayList<GlucoseReadingObject> glucoseListToDate = new ArrayList<>();
+    ArrayList<GlucoseReadingObject> glucoseListFromTime = new ArrayList<>();
+    ArrayList<GlucoseReadingObject> glucoseListToTime = new ArrayList<>();
+    ArrayList<GlucoseReadingObject> glucoseListText = new ArrayList<>();
+
     DatabaseManager dbManager;
     private RecyclerView rvGlucose;
     private RecyclerView.Adapter gAdaptor;
@@ -84,6 +91,10 @@ public class GlucoseRecordsFragment extends Fragment /*implements View.OnClickLi
                 hour = hr;
                 minute = min ;
                 updateDisplayFromTime();
+                glucoseList = FromTime(hour,minute);
+                gAdaptor = new GlucoseAdapter(getActivity(), glucoseList);
+                rvGlucose.setAdapter(gAdaptor);
+                editTextToTime.setText("");
             }
         };
         to_timeListener = new TimePickerDialog.OnTimeSetListener() {
@@ -92,6 +103,9 @@ public class GlucoseRecordsFragment extends Fragment /*implements View.OnClickLi
                 hour = hr;
                 minute = min ;
                 updateDisplayToTime();
+                glucoseList = ToTime(hour,minute);
+                gAdaptor = new GlucoseAdapter(getActivity(), glucoseList);
+                rvGlucose.setAdapter(gAdaptor);
             }
         };
         from_dateListener = new DatePickerDialog.OnDateSetListener() {
@@ -101,6 +115,12 @@ public class GlucoseRecordsFragment extends Fragment /*implements View.OnClickLi
                 month = mnth+1;
                 day = monthday;
                 updateFromDisplay();
+                glucoseList = FromDate(year,  month,  day);
+                gAdaptor = new GlucoseAdapter(getActivity(), glucoseList);
+                rvGlucose.setAdapter(gAdaptor);
+                editTextToTime.setText("");
+                editTextFromTime.setText("");
+                editTextToDate.setText("");
             }
         };
         to_dateListener = new DatePickerDialog.OnDateSetListener() {
@@ -110,6 +130,11 @@ public class GlucoseRecordsFragment extends Fragment /*implements View.OnClickLi
                 month = mnth+1;
                 day = monthday;
                 updateToDisplay();
+                glucoseList = ToDate(year,  month,  day);
+                gAdaptor = new GlucoseAdapter(getActivity(), glucoseList);
+                rvGlucose.setAdapter(gAdaptor);
+                editTextToTime.setText("");
+                editTextFromTime.setText("");
             }
         };
 
@@ -146,9 +171,42 @@ public class GlucoseRecordsFragment extends Fragment /*implements View.OnClickLi
         rvGlucose.setLayoutManager(gLayoutManager);
         editTextSearch.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                glucoseList = dbManager.selectAllGlucoseDetails(userName);
+
+                String  firsthalf =null;
+                String secondhalf =null;
+                glucoseList.clear();
+                glucoseListTemp = dbManager.selectAllGlucoseDetails(userName);
+                if(s.toString().contains(" ")) {
+                    String[] stringArray = s.toString().split(" ");
+                    if(stringArray.length > 2){
+                        firsthalf = stringArray[0];
+                        secondhalf = stringArray[2];
+                    }
+                }
+                if(s.toString().contains(" and ") && secondhalf !=null  ){
+                    for(int i = 0 ; i < glucoseListTemp.size() ; i++)
+                        if(glucoseListTemp.get(i).getReading_taken().contains(firsthalf) && glucoseListTemp.get(i).getReading_taken().contains(secondhalf)) {
+                            glucoseListText.add(glucoseListTemp.get(i));
+                        }
+                } else if(s.toString().contains(" or ") && secondhalf !=null  ){
+                    for(int i = 0 ; i < glucoseListTemp.size() ; i++)
+                        if(glucoseListTemp.get(i).getReading_taken().contains(firsthalf) || glucoseListTemp.get(i).getReading_taken().contains(secondhalf)) {
+                            glucoseListText.add(glucoseListTemp.get(i));
+                        }
+                }else {
+                    for(int i = 0 ; i < glucoseListTemp.size() ; i++)
+                        if(glucoseListTemp.get(i).getReading_taken().contains(s.toString()) )
+                            glucoseListText.add(glucoseListTemp.get(i));
+                }
+                glucoseList = glucoseListText;
                 gAdaptor = new GlucoseAdapter(getActivity(), glucoseList);
                 rvGlucose.setAdapter(gAdaptor);
+
+                editTextFromDate.setText("");
+                editTextToDate.setText("");
+                editTextFromTime.setText("");
+                editTextToTime.setText("");
+
             }
             public void beforeTextChanged(CharSequence s, int start,
                                           int count, int after) {
@@ -234,5 +292,113 @@ public class GlucoseRecordsFragment extends Fragment /*implements View.OnClickLi
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public ArrayList<GlucoseReadingObject> FromDate(int year, int month, int date){
+        String y, m, d;
+        glucoseListFromDate.clear();
+        ArrayList<GlucoseReadingObject> FromDate = new ArrayList<>();
+        if(glucoseListText.size() !=0 || editTextSearch.getText().toString()!= null){
+            FromDate = glucoseListText;
+        }else
+            FromDate = dbManager.selectAllGlucoseDetails(userName);
+        for( int i = 0 ; i < FromDate.size() ; i++){
+            String sdate = FromDate.get(i).getGdate();
+            String[] dateArray = sdate.split("-");
+            y = dateArray[0];
+            m = dateArray[1];
+            d = dateArray[2];
+            if(Integer.parseInt(y) > year) {
+                glucoseListFromDate.add(FromDate.get(i));
+            }else if(Integer.parseInt(y) >= year && Integer.parseInt(m) > month ){
+                glucoseListFromDate.add(FromDate.get(i));
+            }else if (Integer.parseInt(y) >= year && Integer.parseInt(m) >= month && Integer.parseInt(d) >= date){
+                glucoseListFromDate.add(FromDate.get(i));
+            }
+        }
+        return  glucoseListFromDate;
+    }
+    public ArrayList<GlucoseReadingObject> ToDate(int year, int month, int date){
+        String y, m, d;
+        glucoseListToDate.clear();
+        ArrayList<GlucoseReadingObject> ToDate = new ArrayList<>();
+        if(glucoseListFromDate.size() !=0 ||  editTextFromDate.getText().toString()!= null) {
+            ToDate = glucoseListFromDate;
+        }else if(glucoseListText.size() !=0 || editTextSearch.getText().toString()!= null){
+            ToDate = glucoseListText;
+        }else
+            ToDate = dbManager.selectAllGlucoseDetails(userName);
+
+        for( int i = 0 ; i < ToDate.size() ; i++){
+            String sdate = ToDate.get(i).getGdate();
+            String[] dateArray = sdate.split("-");
+            y = dateArray[0];
+            m = dateArray[1];
+            d = dateArray[2];
+            if(Integer.parseInt(y) < year) {
+                glucoseListToDate.add(ToDate.get(i));
+            }else if(Integer.parseInt(y) <= year && Integer.parseInt(m) < month ){
+                glucoseListToDate.add(ToDate.get(i));
+            }else if (Integer.parseInt(y) <= year && Integer.parseInt(m) <= month && Integer.parseInt(d) <= date){
+                glucoseListToDate.add(ToDate.get(i));
+            }
+        }
+        return  glucoseListToDate;
+    }
+
+    public ArrayList<GlucoseReadingObject> FromTime(int hour, int min){
+        String h, m;
+        glucoseListFromTime.clear();
+        ArrayList<GlucoseReadingObject> FromTime = new ArrayList<>();
+        if(glucoseListToDate.size() !=0 || editTextToDate.getText().toString()!= null){
+            FromTime =glucoseListToDate;
+        }else if(glucoseListFromDate.size() !=0 ||  editTextFromDate.getText().toString()!= null) {
+            FromTime = glucoseListFromDate;
+        }else if(glucoseListText.size() !=0 || editTextSearch.getText().toString()!= null){
+            FromTime = glucoseListText;
+        }else
+            FromTime = dbManager.selectAllGlucoseDetails(userName);
+
+        for( int i = 0 ; i < FromTime.size() ; i++){
+            String sdate = FromTime.get(i).getGtime();
+            String[] dateArray = sdate.split(":");
+            h = dateArray[0];
+            m = dateArray[1];
+            if(Integer.parseInt(h) > hour) {
+                glucoseListFromTime.add(FromTime.get(i));
+            }else if(Integer.parseInt(h) >= hour && Integer.parseInt(m) >= min ){
+                glucoseListFromTime.add(FromTime.get(i));
+            }
+        }
+        return  glucoseListFromTime;
+    }
+
+    public ArrayList<GlucoseReadingObject> ToTime(int hour, int min){
+        String h, m;
+        glucoseListToTime.clear();
+        ArrayList<GlucoseReadingObject> ToTime = new ArrayList<>();
+        if(glucoseListFromTime.size() !=0 || editTextFromTime.getText().toString()!= null){
+            ToTime =glucoseListFromTime;
+        } else if(glucoseListToDate.size() !=0 || editTextToDate.getText().toString()!= null){
+            ToTime =glucoseListToDate;
+        }else if(glucoseListFromDate.size() !=0 ||  editTextFromDate.getText().toString()!= null) {
+            ToTime = glucoseListFromDate;
+        }else if(glucoseListText.size() !=0 || editTextSearch.getText().toString()!= null){
+            ToTime = glucoseListText;
+        }else
+            ToTime = dbManager.selectAllGlucoseDetails(userName);
+
+        for( int i = 0 ; i < ToTime.size() ; i++){
+            String sdate = ToTime.get(i).getGtime();
+            String[] dateArray = sdate.split(":");
+            h = dateArray[0];
+            m = dateArray[1];
+            if(Integer.parseInt(h) < hour) {
+                glucoseListToTime.add(ToTime.get(i));
+            }else if(Integer.parseInt(h) <= hour && Integer.parseInt(m) < min ){
+                glucoseListToTime.add(ToTime.get(i));
+            }
+        }
+        return  glucoseListToTime;
     }
 }

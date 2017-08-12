@@ -34,6 +34,13 @@ import java.util.TimeZone;
 public class ExerciseRecordsFragment extends Fragment /*implements View.OnClickListener,DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener*/ {
     private BottomSheetDialog bottomSheetDialog;
     ArrayList<ExerciseReadingObject> exerciseList = new ArrayList<>();
+    ArrayList<ExerciseReadingObject> exerListTemp = new ArrayList<>();
+    ArrayList<ExerciseReadingObject> exerListFromDate = new ArrayList<>();
+    ArrayList<ExerciseReadingObject> exerListToDate = new ArrayList<>();
+    ArrayList<ExerciseReadingObject> exerListFromTime = new ArrayList<>();
+    ArrayList<ExerciseReadingObject> exerListToTime = new ArrayList<>();
+    ArrayList<ExerciseReadingObject> exerListText = new ArrayList<>();
+
     DatabaseManager dbManager;
     private RecyclerView rvExercise;
     private RecyclerView.Adapter eAdaptor;
@@ -48,6 +55,7 @@ public class ExerciseRecordsFragment extends Fragment /*implements View.OnClickL
     private int month;
     private int year, hour,minute;
     TextView editTextSearch;
+
 
     public ExerciseRecordsFragment() {
 
@@ -86,6 +94,10 @@ public class ExerciseRecordsFragment extends Fragment /*implements View.OnClickL
                 hour = hr;
                 minute = min ;
                 updateDisplayFromTime();
+                exerciseList = FromTime(hour,minute);
+                eAdaptor = new ExerciseAdapter(getActivity(), exerciseList);
+                rvExercise.setAdapter(eAdaptor);
+                editTextToTime.setText("");
             }
         };
         to_timeListener = new TimePickerDialog.OnTimeSetListener() {
@@ -94,6 +106,10 @@ public class ExerciseRecordsFragment extends Fragment /*implements View.OnClickL
                 hour = hr;
                 minute = min ;
                 updateDisplayToTime();
+                updateDisplayFromTime();
+                exerciseList = ToTime(hour,minute);
+                eAdaptor = new ExerciseAdapter(getActivity(), exerciseList);
+                rvExercise.setAdapter(eAdaptor);
             }
         };
         from_dateListener = new DatePickerDialog.OnDateSetListener() {
@@ -103,6 +119,12 @@ public class ExerciseRecordsFragment extends Fragment /*implements View.OnClickL
                 month = mnth + 1;
                 day = monthday;
                 updateFromDisplay();
+                exerciseList = FromDate(year,  month,  day);
+                eAdaptor = new ExerciseAdapter(getActivity(), exerciseList);
+                rvExercise.setAdapter(eAdaptor);
+                editTextToTime.setText("");
+                editTextFromTime.setText("");
+                editTextToDate.setText("");
             }
         };
         to_dateListener = new DatePickerDialog.OnDateSetListener() {
@@ -112,6 +134,11 @@ public class ExerciseRecordsFragment extends Fragment /*implements View.OnClickL
                 month = mnth+1;
                 day = monthday;
                 updateToDisplay();
+                exerciseList = ToDate(year,  month,  day);
+                eAdaptor = new ExerciseAdapter(getActivity(), exerciseList);
+                rvExercise.setAdapter(eAdaptor);
+                editTextToTime.setText("");
+                editTextFromTime.setText("");
             }
         };
 
@@ -149,9 +176,41 @@ public class ExerciseRecordsFragment extends Fragment /*implements View.OnClickL
 
         editTextSearch.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                exerciseList = dbManager.selectAllExerciseDetails(userName);
+                String  firsthalf =null;
+                String secondhalf =null;
+                exerciseList.clear();
+                exerListTemp = dbManager.selectAllExerciseDetails(userName);
+                if(s.toString().contains(" ")) {
+                    String[] stringArray = s.toString().split(" ");
+                    if(stringArray.length > 2){
+                        firsthalf = stringArray[0];
+                        secondhalf = stringArray[2];
+                    }
+                }
+                if(s.toString().contains(" and ") && secondhalf !=null  ){
+                    for(int i = 0 ; i < exerListTemp.size() ; i++)
+                        if(exerListTemp.get(i).getExerciseType().contains(firsthalf) && exerListTemp.get(i).getExerciseType().contains(secondhalf)) {
+                            exerListText.add(exerListTemp.get(i));
+                        }
+                } else if(s.toString().contains(" or ") && secondhalf !=null  ){
+                    for(int i = 0 ; i < exerListTemp.size() ; i++)
+                        if(exerListTemp.get(i).getExerciseType().contains(firsthalf) || exerListTemp.get(i).getExerciseType().contains(secondhalf)) {
+                            exerListText.add(exerListTemp.get(i));
+                        }
+                }else {
+                    for(int i = 0 ; i < exerListTemp.size() ; i++)
+                        if(exerListTemp.get(i).getExerciseType().contains(s.toString()) )
+                            exerListText.add(exerListTemp.get(i));
+                }
+                exerciseList = exerListText;
                 eAdaptor = new ExerciseAdapter(getActivity(), exerciseList);
                 rvExercise.setAdapter(eAdaptor);
+
+                editTextFromDate.setText("");
+                editTextToDate.setText("");
+                editTextFromTime.setText("");
+                editTextToTime.setText("");
+
             }
             public void beforeTextChanged(CharSequence s, int start,
                                           int count, int after) {
@@ -242,4 +301,112 @@ public class ExerciseRecordsFragment extends Fragment /*implements View.OnClickL
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+    public ArrayList<ExerciseReadingObject> FromDate(int year, int month, int date){
+        String y, m, d;
+        exerListFromDate.clear();
+        ArrayList<ExerciseReadingObject> FromDate = new ArrayList<>();
+        if(exerListText.size() !=0 || editTextSearch.getText().toString()!= null){
+            FromDate = exerListText;
+        }else
+            FromDate = dbManager.selectAllExerciseDetails(userName);
+        for( int i = 0 ; i < FromDate.size() ; i++){
+            String sdate = FromDate.get(i).getDate();
+            String[] dateArray = sdate.split("-");
+            y = dateArray[0];
+            m = dateArray[1];
+            d = dateArray[2];
+            if(Integer.parseInt(y) > year) {
+                exerListFromDate.add(FromDate.get(i));
+            }else if(Integer.parseInt(y) >= year && Integer.parseInt(m) > month ){
+                exerListFromDate.add(FromDate.get(i));
+            }else if (Integer.parseInt(y) >= year && Integer.parseInt(m) >= month && Integer.parseInt(d) >= date){
+                exerListFromDate.add(FromDate.get(i));
+            }
+        }
+        return  exerListFromDate;
+    }
+    public ArrayList<ExerciseReadingObject> ToDate(int year, int month, int date){
+        String y, m, d;
+        exerListToDate.clear();
+        ArrayList<ExerciseReadingObject> ToDate = new ArrayList<>();
+        if(exerListFromDate.size() !=0 ||  editTextFromDate.getText().toString()!= null) {
+            ToDate = exerListFromDate;
+        }else if(exerListText.size() !=0 || editTextSearch.getText().toString()!= null){
+            ToDate = exerListText;
+        }else
+            ToDate = dbManager.selectAllExerciseDetails(userName);
+
+        for( int i = 0 ; i < ToDate.size() ; i++){
+            String sdate = ToDate.get(i).getDate();
+            String[] dateArray = sdate.split("-");
+            y = dateArray[0];
+            m = dateArray[1];
+            d = dateArray[2];
+            if(Integer.parseInt(y) < year) {
+                exerListToDate.add(ToDate.get(i));
+            }else if(Integer.parseInt(y) <= year && Integer.parseInt(m) < month ){
+                exerListToDate.add(ToDate.get(i));
+            }else if (Integer.parseInt(y) <= year && Integer.parseInt(m) <= month && Integer.parseInt(d) <= date){
+                exerListToDate.add(ToDate.get(i));
+            }
+        }
+        return  exerListToDate;
+    }
+
+    public ArrayList<ExerciseReadingObject> FromTime(int hour, int min){
+        String h, m;
+        exerListFromTime.clear();
+        ArrayList<ExerciseReadingObject> FromTime = new ArrayList<>();
+        if(exerListToDate.size() !=0 || editTextToDate.getText().toString()!= null){
+            FromTime =exerListToDate;
+        }else if(exerListFromDate.size() !=0 ||  editTextFromDate.getText().toString()!= null) {
+            FromTime = exerListFromDate;
+        }else if(exerListText.size() !=0 || editTextSearch.getText().toString()!= null){
+            FromTime = exerListText;
+        }else
+            FromTime = dbManager.selectAllExerciseDetails(userName);
+
+        for( int i = 0 ; i < FromTime.size() ; i++){
+            String sdate = FromTime.get(i).getTime();
+            String[] dateArray = sdate.split(":");
+            h = dateArray[0];
+            m = dateArray[1];
+            if(Integer.parseInt(h) > hour) {
+                exerListFromTime.add(FromTime.get(i));
+            }else if(Integer.parseInt(h) >= hour && Integer.parseInt(m) >= min ){
+                exerListFromTime.add(FromTime.get(i));
+            }
+        }
+        return  exerListFromTime;
+    }
+
+    public ArrayList<ExerciseReadingObject> ToTime(int hour, int min){
+        String h, m;
+        exerListToTime.clear();
+        ArrayList<ExerciseReadingObject> ToTime = new ArrayList<>();
+        if(exerListFromTime.size() !=0 || editTextFromTime.getText().toString()!= null){
+            ToTime =exerListFromTime;
+        } else if(exerListToDate.size() !=0 || editTextToDate.getText().toString()!= null){
+            ToTime =exerListToDate;
+        }else if(exerListFromDate.size() !=0 ||  editTextFromDate.getText().toString()!= null) {
+            ToTime = exerListFromDate;
+        }else if(exerListText.size() !=0 || editTextSearch.getText().toString()!= null){
+            ToTime = exerListText;
+        }else
+            ToTime = dbManager.selectAllExerciseDetails(userName);
+
+        for( int i = 0 ; i < ToTime.size() ; i++){
+            String sdate = ToTime.get(i).getTime();
+            String[] dateArray = sdate.split(":");
+            h = dateArray[0];
+            m = dateArray[1];
+            if(Integer.parseInt(h) < hour) {
+                exerListToTime.add(ToTime.get(i));
+            }else if(Integer.parseInt(h) <= hour && Integer.parseInt(m) < min ){
+                exerListToTime.add(ToTime.get(i));
+            }
+        }
+        return  exerListToTime;
+    }
+
 }

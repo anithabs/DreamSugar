@@ -1,8 +1,5 @@
 package com.project.uwm.mydiabitiestracker.Objects;
 
-/**
- * Created by RWZ on 7/24/2017.
- */
 public class  ExerciseReadingObject {
     private int exercise_id;
     private String user_name;

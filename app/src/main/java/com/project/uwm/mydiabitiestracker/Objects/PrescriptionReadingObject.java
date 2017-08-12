@@ -1,9 +1,5 @@
 package com.project.uwm.mydiabitiestracker.Objects;
 
-/**
- * Created by RWZ on 7/24/2017.
- */
-
 public class PrescriptionReadingObject {
     private int prescription_id;
     private String username;

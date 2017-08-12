@@ -21,7 +21,7 @@
             style="@style/TextStyle"
             android:text="From Level:" />
         <EditText
-            android:id="@+id/editTextFromTime"
+            android:id="@+id/editTextFromGlucoseLevel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/TextStyle"
@@ -42,7 +42,7 @@
             android:text="To Level:" />
 
         <EditText
-            android:id="@+id/editTextToTime"
+            android:id="@+id/editTextToGlucoseLevel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

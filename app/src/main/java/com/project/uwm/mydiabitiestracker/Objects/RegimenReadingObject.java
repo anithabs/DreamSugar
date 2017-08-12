@@ -1,8 +1,5 @@
 package com.project.uwm.mydiabitiestracker.Objects;
 
-/**
- * Created by RWZ on 7/30/2017.
- */
 public class RegimenReadingObject {
     private int regimen_id;
     private String username;

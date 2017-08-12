@@ -46,7 +46,7 @@ public class GlucoseRecordsFragment extends Fragment /*implements View.OnClickLi
 
     String userName;
     UserPreference pref;
-    public EditText editTextFromDate,editTextToDate,editTextFromTime,editTextToTime;
+    public EditText editTextFromDate,editTextToDate,editTextFromTime,editTextToTime, editTextToGL, editTextFromGL;
     private int day;
     private int month;
     private int year, hour,minute;
@@ -75,8 +75,11 @@ public class GlucoseRecordsFragment extends Fragment /*implements View.OnClickLi
         editTextToTime =(EditText)getActivity().findViewById(R.id.editTextToTime);
         editTextSearch =(EditText)getActivity().findViewById(R.id.editTextSearchKeyWord);
 
+
         View rootView = inflater.inflate(R.layout.fragment_glucose_records, container, false);
         rvGlucose = (RecyclerView) rootView.findViewById(R.id.recycleViewGlucose);
+        editTextFromGL = (EditText) rootView.findViewById(R.id.editTextFromGlucoseLevel);
+        editTextToGL =(EditText) rootView.findViewById(R.id.editTextToGlucoseLevel);
         rvGlucose.setHasFixedSize(true);
         Context context =getActivity();
 
@@ -169,6 +172,38 @@ public class GlucoseRecordsFragment extends Fragment /*implements View.OnClickLi
             }
         });
         rvGlucose.setLayoutManager(gLayoutManager);
+        editTextToGL.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        editTextFromGL.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         editTextSearch.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
 
@@ -288,12 +323,11 @@ public class GlucoseRecordsFragment extends Fragment /*implements View.OnClickLi
             editTextFromTime.setText(new StringBuilder().append(hour).append(":").append(minute));
         }
     }
-
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
+    
     public ArrayList<GlucoseReadingObject> FromDate(int year, int month, int date){
         String y, m, d;
         glucoseListFromDate.clear();
@@ -345,7 +379,6 @@ public class GlucoseRecordsFragment extends Fragment /*implements View.OnClickLi
         }
         return  glucoseListToDate;
     }
-
     public ArrayList<GlucoseReadingObject> FromTime(int hour, int min){
         String h, m;
         glucoseListFromTime.clear();
@@ -372,7 +405,6 @@ public class GlucoseRecordsFragment extends Fragment /*implements View.OnClickLi
         }
         return  glucoseListFromTime;
     }
-
     public ArrayList<GlucoseReadingObject> ToTime(int hour, int min){
         String h, m;
         glucoseListToTime.clear();
@@ -401,4 +433,5 @@ public class GlucoseRecordsFragment extends Fragment /*implements View.OnClickLi
         }
         return  glucoseListToTime;
     }
+
 }

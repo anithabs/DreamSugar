@@ -1,28 +1,24 @@
 package com.project.uwm.mydiabitiestracker;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-
 import com.project.uwm.mydiabitiestracker.Objects.ExerciseReadingObject;
 import com.project.uwm.mydiabitiestracker.Objects.FoodConsumedObject;
 import com.project.uwm.mydiabitiestracker.Objects.GlucoseReadingObject;
 import com.project.uwm.mydiabitiestracker.Objects.PrescriptionReadingObject;
 import com.project.uwm.mydiabitiestracker.Objects.RegimenReadingObject;
-import com.project.uwm.mydiabitiestracker.Objects.ReminderObject;
 import com.project.uwm.mydiabitiestracker.Objects.UserObject;
 import com.project.uwm.mydiabitiestracker.Objects.WordObject;
-
+import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class DatabaseManager extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "DiabetesDB";
-    private static final int DATABASE_VERSION = 1;
 
+    private static final String PASSPHRASE="test123";
+    private static final String DATABASE_NAME = "DiabetesDB1";
+    private static final int DATABASE_VERSION = 1;
     private static final String USER_NAME = "username";
 
     //User table creation
@@ -155,8 +151,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     public DatabaseManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        SQLiteDatabase.loadLibs(context);
     }
-
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(usqlCreate);
         db.execSQL(dsqlCreate);
@@ -167,7 +163,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.execSQL(asqlCreate);
         db.execSQL(wsqlCreate);
     }
-
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop old tables if they exist:
         db.execSQL("drop table if exists" + USER_TABLE);
@@ -183,7 +178,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     // All Insert
     public void insertRegime(RegimenReadingObject re) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String sqlInsert = "insert into " + REGIMEN_TABLE + " (" + RID + ","+USER_NAME+ "," + TESTED_BGL  +  ","+EXERCISE+"," + rMEDS  + "," + rDIET  + ","+ rDATE +","+ rTIME +") values(";
         sqlInsert += "null,'"+re.getUsername() + "','" + re.getTested()  + "','"+re.getExercise()+"','" + re.getMeds() + "','" + re.getDiet() + "',julianday('" + re.getDate() + "'),julianday('" + re.getTime() + "'))";
         db.execSQL(sqlInsert);
@@ -191,7 +186,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     }
     public void insertFood(FoodConsumedObject food) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String fSqlInsert = "insert into " + DIET_TABLE;
         fSqlInsert += " (" + FID + ","+USER_NAME + ", " + TYPEOFFOOD + ", " + AMOUNTOFFOOD + ", "  + FDATE + ", " + FTIME + ")";
         fSqlInsert += " values(null,'" +food.getUsername()+"','"+ food.getTypeOfFood() + "'," + food.getAmountOfFood()  + ",julianday('" + food.getDate() + "'),julianday('" + food.getTime() + ":00'))";
@@ -199,7 +194,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.close();
     }
     public void insertGlucose(GlucoseReadingObject glucose) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String gSqlInsert = "insert into " + GLUCOSE_TABLE;
         gSqlInsert += " (" + GID + ","+USER_NAME+ ", " + GLUCOSE_LEVEL + ", " + GLUCOSE_READING_TAKEN + ", " + GDATE + ", " + GTIME + ")";
         gSqlInsert += " values(null,'" + glucose.getUsername()+"',"+glucose.getGlucose_level() + ",'" + glucose.getReading_taken() + "'," + "julianday('" + glucose.getGdate() + "'),julianday('" + glucose.getGtime() + ":00'))";
@@ -207,7 +202,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.close();
     }
     public void insertPrescription(PrescriptionReadingObject pre) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String sqlInsert = "insert into " + PRESCRIPTON_TABLE;
         sqlInsert += " (" + PID + ","+USER_NAME +   ", " + DRUG_NAME + ", " + DOSE + ", " + DATE_TAKEN + ", " + TIME_TAKEN + ")";
         sqlInsert += " values(null,'"+pre.getUsername()+"','" + pre.getDrugName() + "'," +pre.getDosage() +  ",julianday('" + pre.getDate() + "'),julianday('" + pre.getTime() + ":00'))";
@@ -215,7 +210,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.close();
     }
     public void insertExercise(ExerciseReadingObject exercise) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String sqlInsert = "insert into " + EXERCISE_TABLE;
         sqlInsert += " (" + EID +  ","+USER_NAME+ ", " + EXERCISE_TYPE + ", " + E_DURATION + ", " + EXERCISE_DATE + ", " + EXERCISE_TIME + ")";
         sqlInsert += " values(null,'" +exercise.getUser_name()+"','"+ exercise.getExerciseType() + "'," +exercise.getDuration() +  ",julianday('" + exercise.getDate() + "'),julianday('" + exercise.getTime() + ":00'))";
@@ -223,7 +218,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.close();
     }
     public void insertUser(UserObject uo) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String sqlInsert = "insert into " + USER_TABLE + " (" + USERNAME + "," + PASSWORD + "," + FIRSTNAME + "," + LASTNAME + "," + EMAIL + ") values(";
         sqlInsert += "'" + uo.getUserName() + "','" + uo.getPassword() + "','" + uo.getFirstName() + "','" + uo.getLastName() + "','" + uo.getEmail() + "')";
         db.execSQL(sqlInsert);
@@ -233,14 +228,16 @@ public class DatabaseManager extends SQLiteOpenHelper {
     // The following four methods are related to Word objects for AutocompleteTextBox
     //
     public void insertWord(WordObject wo) {
-        SQLiteDatabase db = this.getWritableDatabase();
+
+
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String sqlInsert = "insert into " + WORD_TABLE + " (" + WID + "," + WORD + "," + SOURCE + ") values(";
         sqlInsert += "null,'" + wo.getWord() + "','" + wo.getSource() + "')";
         db.execSQL(sqlInsert);
         db.close();
     }
     public ArrayList<String> selectWordsBySource(String source) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(PASSPHRASE);
         ArrayList<String> resultList = new ArrayList<String>();
         String query = "select * from " + WORD_TABLE + " where " + SOURCE + "='" + source + "'";
         Cursor c = db.rawQuery(query, null);
@@ -253,7 +250,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return resultList;
     }
     public int numOccurrencesByObject(WordObject entry) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String query = "Select * from " + WORD_TABLE + " where " +
                 WORD + "='" + entry.getWord() + "' and " +
                 SOURCE + "='" + entry.getSource() + "'";
@@ -264,7 +261,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return value;
     }
     public boolean ifSourceColumnHasId(String id) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         Boolean returnValue = false;
         Cursor cursor = db.rawQuery("SELECT * FROM " + WORD_TABLE + " WHERE source = '" + id + "'", null);
         if (cursor.getCount() > 0) { // This will get the number of rows
@@ -279,7 +276,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     //user authentication queries
     //
     public int selectUser(String name) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String query = "Select * from " + USER_TABLE + " where " + USERNAME + "='" + name + "'";
         Cursor cursor = db.rawQuery(query, null);
         int value = cursor.getCount();
@@ -287,7 +284,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return value;
     }
     public int selectEmail(String email) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String query = "Select * from " + USER_TABLE + " where " + EMAIL + "='" + email + "'";
         Cursor cursor = db.rawQuery(query, null);
         int value = cursor.getCount();
@@ -295,7 +292,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return value;
     }
     public int verifyLogin(String userName, String passWord) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         db.execSQL(usqlCreate);
         String query = "Select * from " + USER_TABLE + " where " + USERNAME + "='" + userName + "' and " + PASSWORD + "='" + passWord + "' ";
         Cursor cursor = db.rawQuery(query, null);
@@ -304,7 +301,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return value;
     }
     public RegimenReadingObject selectRegimen(String userName) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         int rvalue = 0;
         int id =0;
         String date = " ";
@@ -345,25 +342,25 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     // Delete By Date and Time
     public void deleteFoodByDateTime(String gettime, String getdate,String username) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String sqlDelete = "Delete from " + DIET_TABLE + " where TIME(" + FTIME + ") = TIME('" + gettime + "') and DATE(" + FDATE + ")=DATE('" + getdate + "') and " + USER_NAME + "= '" + username + "'";
         db.execSQL(sqlDelete);
         db.close();
     }
     public void deleteExerciseByDateTime(String gettime, String getdate,String username) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String sqlDelete = "Delete from " + EXERCISE_TABLE + " where TIME(" + EXERCISE_TIME + ") = TIME('" + gettime + "') and DATE(" + EXERCISE_DATE + ")=DATE('" + getdate + "') and " + USER_NAME + "= '" + username + "'";
         db.execSQL(sqlDelete);
         db.close();
     }
     public void deleteGlucoseByDateTime(String gettime, String getdate,String username) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String sqlDelete = "Delete from " + GLUCOSE_TABLE + " where TIME(" + GTIME + ") = TIME('" + gettime + "') and DATE(" + GDATE + ")=DATE('" + getdate + "') and " + USER_NAME + "= '" + username + "'";
         db.execSQL(sqlDelete);
         db.close();
     }
     public void deletePrescriptionByDateTime(String gettime, String getdate,String username) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String sqlDelete = "Delete from " + PRESCRIPTON_TABLE + " where TIME(" + TIME_TAKEN + ") = TIME('" + gettime + "') and DATE(" + DATE_TAKEN + ")=DATE('" + getdate + "') and " + USER_NAME + "= '" + username + "'";
         db.execSQL(sqlDelete);
         db.close();
@@ -371,7 +368,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     // Update By Object
     public void updateFoodByObject(FoodConsumedObject fco) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String sqlUpdate = "update " + DIET_TABLE + " set " + AMOUNTOFFOOD + "='" + fco.getAmountOfFood() +
                 "' , " + TYPEOFFOOD + "='" + fco.getTypeOfFood() + "'"+
                 " where "+USER_NAME +"= '"+ fco.getUsername()+"' and  TIME(" + FTIME + ") = TIME('" + fco.getTime() + "') and DATE(" + FDATE + ")=DATE('" + fco.getDate() + "')";
@@ -379,14 +376,14 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.close();
     }
     public void updateExerciseByObject(ExerciseReadingObject ero) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String sqlUpdate = "update " + EXERCISE_TABLE + " set " + EXERCISE_TYPE + "='" + ero.getExerciseType() +
                 "' , " + E_DURATION + "='" + ero.getDuration() + "' where  "+USER_NAME +"= '"+ ero.getUser_name()+"' and  TIME(" + EXERCISE_TIME + ") = TIME('" + ero.getTime() + ":00') and DATE(" + EXERCISE_DATE + ")=DATE('" + ero.getDate() + "')";
         db.execSQL(sqlUpdate);
         db.close();
     }
     public void updateGlucoseByObject(GlucoseReadingObject gro) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String sqlUpdate = "update " + GLUCOSE_TABLE + " set " + GLUCOSE_LEVEL + "='" + gro.getGlucose_level() +
                 "' , " + GLUCOSE_READING_TAKEN + "='" + gro.getReading_taken() + "' where  "+USER_NAME +"= '"+ gro.getUsername()+"' and  TIME(" + GTIME + ") = TIME('" + gro.getGtime() + "') and DATE(" + GDATE + ")=DATE('" + gro.getGdate() + "')";
         db.execSQL(sqlUpdate);
@@ -394,7 +391,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
     public void updatePrescription(PrescriptionReadingObject pro) {
         String drug = pro.getDrugName();
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String sqlUpdate = "update " + PRESCRIPTON_TABLE + " set " + DRUG_NAME + "='" + pro.getDrugName() +
                 "' , " + DOSE + "='" + pro.getDosage() + "' where  "+USER_NAME +"= '"+ pro.getUsername()+"'oppbbbobbbbaaavbbb and  TIME(" + TIME_TAKEN + ") = TIME('" + pro.getTime() + "') and DATE(" + DATE_TAKEN + ")=DATE('" + pro.getDate() + "')";
         db.execSQL(sqlUpdate);
@@ -403,7 +400,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     //select record by date and time
     public FoodConsumedObject selectFoodByTime(String gettime, String getdate,String username) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         int fvalue = 0;
         String date = " ";
         String time = " ";
@@ -427,7 +424,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return foodObject;
     }
     public ExerciseReadingObject selectExerciseByTime(String gettime, String getdate,String username) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         int evalue = 0;
         String date = " ";
         String time = " ";
@@ -451,7 +448,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return ero;
     }
     public GlucoseReadingObject selectGlucoseByTime(String gettime, String getdate,String username) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         String date = " ";
         String time = " ";
         String gSqlSelect = "select *  from " + GLUCOSE_TABLE + " where TIME(" + GTIME + ") = TIME('" + gettime + "') and DATE(" + GDATE + ")=DATE('" + getdate + "') and " + USER_NAME + "= '" + username + "'";
@@ -474,7 +471,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return gro;
     }
     public PrescriptionReadingObject selectPrescriptionByDateTime(String gettime, String getdate,String username) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         int pvalue = 0;
         String date = " ";
         String time = " ";
@@ -499,7 +496,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
     // select All records
     public ArrayList<FoodConsumedObject> selectAllFoodDetails(String username) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         int fvalue = 0;
         String date = " ";
         String time = " ";
@@ -525,7 +522,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     public ArrayList<GlucoseReadingObject> selectAllGlucoseDetails(String username) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         int gvalue = 0;
         String date = " ";
         String time = " ";
@@ -550,7 +547,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return ArrayGlucose;
     }
     public ArrayList<ExerciseReadingObject> selectAllExerciseDetails(String username) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         int evalue = 0;
         String date = " ";
         String time = " ";
@@ -575,7 +572,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return ArrayExercise;
     }
     public ArrayList<PrescriptionReadingObject> selectAllPrescriptionDetails(String username){
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(PASSPHRASE);
         int pvalue = 0;
         String date = " ";
         String time = " ";
@@ -600,385 +597,4 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return ArrayPres;
     }
 
-    //select week record
-  /*  public ArrayList<FoodConsumedObject> selectWeekFoodDetails( String username) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int fvalue =0 ;
-        String date =" ";
-        String time =" ";
-        String fSqlSelect = "select *  from " + DIET_TABLE + " where DATE("+FDATE+ ") between  DATE('now', '-7 day') and DATE('now')" + " and " + USER_NAME + "= '" + username + "'";
-        Cursor cursor = db.rawQuery(fSqlSelect, null);
-        ArrayList<FoodConsumedObject> ArrayFood = new ArrayList<FoodConsumedObject>();
-
-        while (cursor.moveToNext()) {
-            FoodConsumedObject fco = new FoodConsumedObject(Integer.parseInt(cursor.getString(0)),cursor.getString(1), cursor.getString(2), Integer.parseInt(cursor.getString(3)),
-                  cursor.getString(4), cursor.getString(5));
-            fvalue = fco.getFood_id();
-            String fSqlDate = "select date("+FDATE+"),time("+FTIME+") from " + DIET_TABLE + " where " +FID + "=" +fvalue;
-            Cursor cursor1 = db.rawQuery(fSqlDate,null);
-            if(cursor1.moveToNext())
-                date = cursor1.getString(0);
-            time = cursor1.getString(1);
-            fco.setDate(date);
-            fco.setTime(time);
-            ArrayFood.add(fco);
-        }
-        db.close();
-        return ArrayFood;
-    }
-    public ArrayList<GlucoseReadingObject> selectWeekGlucoseDetails(String username ) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int gvalue =0 ;
-        String date =" ";
-        String time =" ";
-        String gSqlSelect = "select *  from " + GLUCOSE_TABLE + " where DATE("+GDATE+ ") between  DATE('now', '-7 day') and DATE('now')"  + " and " + USER_NAME + "= '" + username + "'";
-        Cursor cursor = db.rawQuery(gSqlSelect, null);
-        ArrayList<GlucoseReadingObject> ArrayGlucose = new ArrayList<GlucoseReadingObject>();
-
-        while (cursor.moveToNext()) {
-            GlucoseReadingObject gco = new GlucoseReadingObject(Integer.parseInt(cursor.getString(0)),cursor.getString(1), Integer.parseInt(cursor.getString(2)), cursor.getString(3), cursor.getString(4),
-                    (cursor.getString(5)));
-            gvalue = gco.getGlucose_id();
-            String fSqlDate = "select date("+GDATE+"),time("+GTIME+") from " + GLUCOSE_TABLE + " where " +GID + "=" +gvalue;
-            Cursor cursor1 = db.rawQuery(fSqlDate,null);
-            if(cursor1.moveToNext())
-                date = cursor1.getString(0);
-            time = cursor1.getString(1);
-            gco.setGdate(date);
-            gco.setGtime(time);
-            ArrayGlucose.add(gco);
-        }
-        db.close();
-        return ArrayGlucose;
-    }
-    public ArrayList<PrescriptionReadingObject>selectWeekPrescriptionRecord(String username){
-        SQLiteDatabase db = this.getWritableDatabase();
-        int pvalue =0 ;
-        String date =" ";
-        String time =" ";
-        String fSqlSelect = "select *  from " + PRESCRIPTON_TABLE + " where DATE(" + DATE_TAKEN +")  between  DATE('now', '-7 day') and DATE('now')" + " and " + USER_NAME + "= '" + username + "'";
-        Cursor cursor = db.rawQuery(fSqlSelect, null);
-        ArrayList<PrescriptionReadingObject> ArrayExercise = new ArrayList<PrescriptionReadingObject>();
-
-        while (cursor.moveToNext()) {
-            PrescriptionReadingObject fco = new PrescriptionReadingObject(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2),Integer.parseInt(cursor.getString(3)), cursor.getString(4),
-                    (cursor.getString(5)));
-            pvalue = fco.getPrescription_id();
-            String fSqlDate = "select date("+DATE_TAKEN+"),time("+TIME_TAKEN+") from " + PRESCRIPTON_TABLE + " where " +PID + "=" +pvalue;
-            Cursor cursor1 = db.rawQuery(fSqlDate,null);
-            if(cursor1.moveToNext())
-                date = cursor1.getString(0);
-            time = cursor1.getString(1);
-            fco.setDate(date);
-            fco.setTime(time);
-            ArrayExercise.add(fco);
-        }
-        db.close();
-        return ArrayExercise;
-
-    }
-    public ArrayList<ExerciseReadingObject> selectWeekExerciseDetails(String username) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int evalue = 0;
-        String date = " ";
-        String time = " ";
-        String eSqlSelect = "select *  from " + EXERCISE_TABLE +  " where DATE(" + DATE_TAKEN +")  between  DATE('now', '-7 day') and DATE('now')" + " and " + USER_NAME + "= '" + username + "'";
-        Cursor cursor = db.rawQuery(eSqlSelect, null);
-        ArrayList<ExerciseReadingObject> ArrayExercise = new ArrayList<ExerciseReadingObject>();
-
-        while (cursor.moveToNext()) {
-            ExerciseReadingObject gco =  new ExerciseReadingObject(Integer.parseInt(cursor.getString(0)),cursor.getString(1), cursor.getString(2), Integer.parseInt(cursor.getString(3)), cursor.getString(4),
-                    (cursor.getString(5)));
-            evalue = gco.getExercise_id();
-            String eSqlDate = "select date(" + EXERCISE_DATE + "),time(" + EXERCISE_TIME + ") from " + EXERCISE_TABLE + " where " + EID + "=" + evalue;
-            Cursor cursor1 = db.rawQuery(eSqlDate, null);
-            if (cursor1.moveToNext())
-                date = cursor1.getString(0);
-            time = cursor1.getString(1);
-            gco.setDate(date);
-            gco.setTime(time);
-            ArrayExercise.add(gco);
-        }
-        db.close();
-        return ArrayExercise;
-    }
-
-*/
-    //select week record
-  /*  public ArrayList<FoodConsumedObject> selectSearchFoodDetails( String username, String hint) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int fvalue =0 ;
-        String date =" ";
-        String time =" ";
-        String fSqlSelect = "select *  from " + DIET_TABLE + " where " + USER_NAME + "= '" + username + "' and "+ TYPEOFFOOD +" like '%"+hint+"%'" ;
-        Cursor cursor = db.rawQuery(fSqlSelect, null);
-        ArrayList<FoodConsumedObject> ArrayFood = new ArrayList<FoodConsumedObject>();
-
-        while (cursor.moveToNext()) {
-            FoodConsumedObject fco = new FoodConsumedObject(Integer.parseInt(cursor.getString(0)),cursor.getString(1), cursor.getString(2), Integer.parseInt(cursor.getString(3)),
-                    cursor.getString(4), cursor.getString(5));
-            fvalue = fco.getFood_id();
-            String fSqlDate = "select date("+FDATE+"),time("+FTIME+") from " + DIET_TABLE + " where " +FID + "=" +fvalue;
-            Cursor cursor1 = db.rawQuery(fSqlDate,null);
-            if(cursor1.moveToNext())
-                date = cursor1.getString(0);
-            time = cursor1.getString(1);
-            fco.setDate(date);
-            fco.setTime(time);
-            ArrayFood.add(fco);
-        }
-        db.close();
-        return ArrayFood;
-    }
-    public ArrayList<GlucoseReadingObject> selectSearchGlucoseDetails(String username,String hint ) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int gvalue =0 ;
-        String date =" ";
-        String time =" ";
-        String gSqlSelect = "select *  from " + GLUCOSE_TABLE + "  where " + USER_NAME + "= '" + username + "' and "+ GLUCOSE_READING_TAKEN +" like '%"+hint+"%'" ;
-        Cursor cursor = db.rawQuery(gSqlSelect, null);
-        ArrayList<GlucoseReadingObject> ArrayGlucose = new ArrayList<GlucoseReadingObject>();
-
-        while (cursor.moveToNext()) {
-            GlucoseReadingObject gco = new GlucoseReadingObject(Integer.parseInt(cursor.getString(0)),cursor.getString(1), Integer.parseInt(cursor.getString(2)), cursor.getString(3), cursor.getString(4),
-                    (cursor.getString(5)));
-            gvalue = gco.getGlucose_id();
-            String fSqlDate = "select date("+GDATE+"),time("+GTIME+") from " + GLUCOSE_TABLE + " where " +GID + "=" +gvalue;
-            Cursor cursor1 = db.rawQuery(fSqlDate,null);
-            if(cursor1.moveToNext())
-                date = cursor1.getString(0);
-            time = cursor1.getString(1);
-            gco.setGdate(date);
-            gco.setGtime(time);
-            ArrayGlucose.add(gco);
-        }
-        db.close();
-        return ArrayGlucose;
-    }
-    public ArrayList<PrescriptionReadingObject>selectSearchPrescriptionRecord(String username,String hint){
-        SQLiteDatabase db = this.getWritableDatabase();
-        int pvalue =0 ;
-        String date =" ";
-        String time =" ";
-        String fSqlSelect = "select *  from " + PRESCRIPTON_TABLE + "  where " + USER_NAME + "= '" + username + "' and "+ DRUG_NAME +" like '%"+hint+"%'" ;
-        Cursor cursor = db.rawQuery(fSqlSelect, null);
-        ArrayList<PrescriptionReadingObject> ArrayExercise = new ArrayList<PrescriptionReadingObject>();
-
-        while (cursor.moveToNext()) {
-            PrescriptionReadingObject fco = new PrescriptionReadingObject(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2),Integer.parseInt(cursor.getString(3)), cursor.getString(4),
-                    (cursor.getString(5)));
-            pvalue = fco.getPrescription_id();
-            String fSqlDate = "select date("+DATE_TAKEN+"),time("+TIME_TAKEN+") from " + PRESCRIPTON_TABLE + " where " +PID + "=" +pvalue;
-            Cursor cursor1 = db.rawQuery(fSqlDate,null);
-            if(cursor1.moveToNext())
-                date = cursor1.getString(0);
-            time = cursor1.getString(1);
-            fco.setDate(date);
-            fco.setTime(time);
-            ArrayExercise.add(fco);
-        }
-        db.close();
-        return ArrayExercise;
-
-    }
-    public ArrayList<ExerciseReadingObject> selectSearchExerciseDetails(String username,String hint) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int evalue = 0;
-        String date = " ";
-        String time = " ";
-        String eSqlSelect = "select *  from " + EXERCISE_TABLE + " where " + USER_NAME + "= '" + username + "' and "+ EXERCISE_TYPE +" like '%"+hint+"%'" ;
-        Cursor cursor = db.rawQuery(eSqlSelect, null);
-        ArrayList<ExerciseReadingObject> ArrayExercise = new ArrayList<ExerciseReadingObject>();
-
-        while (cursor.moveToNext()) {
-            ExerciseReadingObject gco =  new ExerciseReadingObject(Integer.parseInt(cursor.getString(0)),cursor.getString(1), cursor.getString(2), Integer.parseInt(cursor.getString(3)), cursor.getString(4),
-                    (cursor.getString(5)));
-            evalue = gco.getExercise_id();
-            String eSqlDate = "select date(" + EXERCISE_DATE + "),time(" + EXERCISE_TIME + ") from " + EXERCISE_TABLE + " where " + EID + "=" + evalue;
-            Cursor cursor1 = db.rawQuery(eSqlDate, null);
-            if (cursor1.moveToNext())
-                date = cursor1.getString(0);
-            time = cursor1.getString(1);
-            gco.setDate(date);
-            gco.setTime(time);
-            ArrayExercise.add(gco);
-        }
-        db.close();
-        return ArrayExercise;
-    }
-*/
-  /*  //select day record
-    public ArrayList<GlucoseReadingObject> selectOneGlucoseDetails(String username ) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int gvalue =0 ;
-        String date =" ";
-        String time =" ";
-        String gSqlSelect = "select *  from " + GLUCOSE_TABLE + " where DATE('" + GDATE +"') = DATE('now') and " + USER_NAME + "= '" + username + "'";
-        Cursor cursor = db.rawQuery(gSqlSelect, null);
-        ArrayList<GlucoseReadingObject> ArrayGlucose = new ArrayList<GlucoseReadingObject>();
-
-        while (cursor.moveToNext()) {
-            GlucoseReadingObject gco = new GlucoseReadingObject(Integer.parseInt(cursor.getString(0)),cursor.getString(1), Integer.parseInt(cursor.getString(2)), cursor.getString(3), cursor.getString(4),
-                    (cursor.getString(5)));
-            gvalue = gco.getGlucose_id();
-            String fSqlDate = "select date("+GDATE+"),time("+GTIME+") from " + GLUCOSE_TABLE + " where " +GID + "=" +gvalue;
-            Cursor cursor1 = db.rawQuery(fSqlDate,null);
-            if(cursor1.moveToNext())
-                date = cursor1.getString(0);
-            time = cursor1.getString(1);
-            gco.setGdate(date);
-            gco.setGtime(time);
-            ArrayGlucose.add(gco);
-        }
-        db.close();
-        return ArrayGlucose;
-    }
-    public ArrayList<FoodConsumedObject> selectOneDayFoodDetails(String username ) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int fvalue =0 ;
-        String date =" ";
-        String time =" ";
-        String fSqlSelect = "select *  from " + DIET_TABLE + " where DATE('" + FDATE +"') = DATE('now') and " + USER_NAME + "= '" + username + "'";
-        Cursor cursor = db.rawQuery(fSqlSelect, null);
-        ArrayList<FoodConsumedObject> ArrayFood = new ArrayList<FoodConsumedObject>();
-
-        while (cursor.moveToNext()) {
-            FoodConsumedObject fco = new FoodConsumedObject(Integer.parseInt(cursor.getString(0)),cursor.getString(1), cursor.getString(2), Integer.parseInt(cursor.getString(3)),
-                    cursor.getString(4), cursor.getString(5));
-            fvalue = fco.getFood_id();
-            String fSqlDate = "select date("+FDATE+"),time("+FTIME+") from " + DIET_TABLE + " where " +FID + "=" +fvalue;
-            Cursor cursor1 = db.rawQuery(fSqlDate,null);
-            if(cursor1.moveToNext())
-                date = cursor1.getString(0);
-            time = cursor1.getString(1);
-            fco.setDate(date);
-            fco.setTime(time);
-            //ArrayFood.add(fco);
-        }
-        db.close();
-        return ArrayFood;
-    }
-    public ArrayList<ExerciseReadingObject>selectOneDayExerciseRecord(String username){
-        SQLiteDatabase db = this.getWritableDatabase();
-        int evalue =0 ;
-        String date =" ";
-        String time =" ";
-        String fSqlSelect = "select *  from " + EXERCISE_TABLE + "where DATE('" + EXERCISE_DATE +"') = DATE('now') and "+ USER_NAME + "= '" + username + "'";;
-        Cursor cursor = db.rawQuery(fSqlSelect, null);
-        ArrayList<ExerciseReadingObject> ArrayExercise = new ArrayList<ExerciseReadingObject>();
-
-        while (cursor.moveToNext()) {
-            ExerciseReadingObject fco =  new ExerciseReadingObject(Integer.parseInt(cursor.getString(0)),cursor.getString(1), cursor.getString(2), Integer.parseInt(cursor.getString(3)), cursor.getString(4),
-                    (cursor.getString(5)));
-            evalue = fco.getExercise_id();
-            String fSqlDate = "select date("+EXERCISE_DATE+"),time("+EXERCISE_TIME+") from " + EXERCISE_TABLE + " where " +EID + "=" +evalue;
-            Cursor cursor1 = db.rawQuery(fSqlDate,null);
-            if(cursor1.moveToNext())
-                date = cursor1.getString(0);
-            time = cursor1.getString(1);
-            fco.setDate(date);
-            fco.setTime(time);
-            ArrayExercise.add(fco);
-        }
-        db.close();
-        return ArrayExercise;
-
-    }
-    public ArrayList<PrescriptionReadingObject>selectOneDayPrescriptionRecord(String username){
-        SQLiteDatabase db = this.getWritableDatabase();
-        int pvalue =0 ;
-        String date =" ";
-        String time =" ";
-        String fSqlSelect = "select *  from " + PRESCRIPTON_TABLE + "where DATE('" + DATE_TAKEN +"') = DATE('now') and " + USER_NAME + "= '" + username + "'";
-        Cursor cursor = db.rawQuery(fSqlSelect, null);
-        ArrayList<PrescriptionReadingObject> ArrayExercise = new ArrayList<PrescriptionReadingObject>();
-
-        while (cursor.moveToNext()) {
-            PrescriptionReadingObject fco = new PrescriptionReadingObject(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2),Integer.parseInt(cursor.getString(3)), cursor.getString(4),
-                    (cursor.getString(5)));
-            pvalue = fco.getPrescription_id();
-            String fSqlDate = "select date("+DATE_TAKEN+"),time("+TIME_TAKEN+") from " + PRESCRIPTON_TABLE + " where " +PID + "=" +pvalue;
-            Cursor cursor1 = db.rawQuery(fSqlDate,null);
-            if(cursor1.moveToNext())
-                date = cursor1.getString(0);
-            time = cursor1.getString(1);
-            fco.setDate(date);
-            fco.setTime(time);
-            ArrayExercise.add(fco);
-        }
-        db.close();
-        return ArrayExercise;
-
-    }
-*/
-    public ArrayList<ReminderObject> getReminders(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        int pvalue =0 ;
-        String date =" ";
-        String time =" ";
-        String fSqlSelect = "select *  from " + PRESCRIPTON_TABLE + "where DATE('" + DATE_TAKEN +"') = DATE('now') and " + USER_NAME + "= '" +   "'";
-        Cursor cursor = db.rawQuery(fSqlSelect, null);
-        ArrayList<ReminderObject> ArrayExercise = new ArrayList<ReminderObject>();
-
-        while (cursor.moveToNext()) {
-            ReminderObject ro = new ReminderObject(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2),cursor.getString(3), Boolean.parseBoolean(cursor.getString(4)),
-                    Boolean.parseBoolean((cursor.getString(5))));
-        /*    pvalue = ro.getId();
-            String fSqlDate = "select date("+DATE_TAKEN+"),time("+TIME_TAKEN+") from " + PRESCRIPTON_TABLE + " where " +PID + "=" +pvalue;
-            Cursor cursor1 = db.rawQuery(fSqlDate,null);
-            if(cursor1.moveToNext())
-                date = cursor1.getString(0);
-            time = cursor1.getString(1);
-            ro.setDate(date);
-            ro.setTime(time);
-            ArrayExercise.add(ro);*/
-        }
-        db.close();
-        return ArrayExercise;
-    }
-
-    public long createReminder(String title, String body, String reminderDateTime) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues initialValues = new ContentValues();
-        initialValues.put(KEY_TITLE, title);
-        initialValues.put(KEY_BODY, body);
-        initialValues.put(KEY_DATE_TIME, reminderDateTime);
-
-        return db.insert(DATABASE_TABLE, null, initialValues);
-    }
-
-    public boolean deleteReminder(long rowId) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        return db.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
-    }
-
-    public Cursor fetchAllReminders() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_TITLE,
-                KEY_BODY, KEY_DATE_TIME}, null, null, null, null, null);
-    }
-
-    public Cursor fetchReminder(long rowId) throws SQLException {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor mCursor =
-
-                db.query(true, DATABASE_TABLE, new String[] {KEY_ROWID,
-                                KEY_TITLE, KEY_BODY, KEY_DATE_TIME}, KEY_ROWID + "=" + rowId, null,
-                        null, null, null, null);
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-        }
-        return mCursor;
-
-    }
-    public boolean updateReminder(long rowId, String title, String body, String reminderDateTime) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues args = new ContentValues();
-        args.put(KEY_TITLE, title);
-        args.put(KEY_BODY, body);
-        args.put(KEY_DATE_TIME, reminderDateTime);
-
-        return db.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
-    }
 }

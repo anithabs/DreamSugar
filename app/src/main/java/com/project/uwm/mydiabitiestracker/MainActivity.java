@@ -156,12 +156,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(this,ListMainRecords.class);
             startActivity(intent);
 
-
         } else if (id == R.id.view_graphs) {
             Intent intent = new Intent(this,ViewGraphs.class);
             startActivity(intent);
 
-        } else if (id == R.id.delete) {
+        } else if (id == R.id.view_alarms) {
             Intent intent = new Intent(this, ReminderListActivity.class);
             startActivity(intent);
 

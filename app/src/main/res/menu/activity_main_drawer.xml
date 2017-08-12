@@ -5,15 +5,20 @@
         <item
             android:id="@+id/view_records"
             android:icon="@drawable/ic_menu_share"
-            android:title="View Records and update" />
+            android:title="View Records" />
         <item
             android:id="@+id/view_graphs"
             android:icon="@drawable/ic_menu_gallery"
+            android:title="View Graphs" />
+        <item
+            android:id="@+id/statistics"
+            android:icon="@drawable/ic_menu_slideshow"
             android:title="View Statistics" />
         <item
-            android:id="@+id/delete"
+            android:id="@+id/view_alarms"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Delete" />
+            android:title="Alarms Details" />
+
         <item
             android:id="@+id/user_details"
             android:icon="@drawable/ic_menu_manage"
